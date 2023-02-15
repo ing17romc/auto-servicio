@@ -49,7 +49,7 @@ const ComponentEdit = ({ id = 0, newId, nombre, estado, idCeroHumedadProducto, p
 			<div className='start-1 size-6 padding-v-20'>
 				<TextBox
 					id='newId'
-					value={state.newId.toString()}
+					value={state.newId ? state.newId.toString() : '0'}
 					eventChange={e => onInputChange(e)}
 					titleBottom='id'
 				/>
