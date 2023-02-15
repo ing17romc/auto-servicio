@@ -1,7 +1,5 @@
 
 import Layout from 'components/Layout'
-import Menu from 'components/Menu'
-import { MENU_OPTIONS } from '../constants'
 import {
 	AuthAction,
 	withAuthUser,
