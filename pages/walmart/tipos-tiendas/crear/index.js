@@ -15,7 +15,7 @@ const { TIPOS_TIENDAS: PATH, BASE } = CONFIG.ROUTER.WALMART
 const index = ({ api }) => {
 	return (
 		<Layout>
-			<GenericEdit pathRetun={BASE + PATH} title={TITLE_NEW} api={api} />
+			<GenericEdit pathRetun={BASE + PATH} title={TITLE_NEW} api={API} />
 		</Layout>
 	)
 }
@@ -23,7 +23,7 @@ const index = ({ api }) => {
 export const getServerSideProps = withAuthUserTokenSSR({
 	whenUnauthed: AuthAction.REDIRECT_TO_LOGIN
 })(async (props) => {
-	return { props: { api: API } } 
+	return { props: { } }
 })
 
 export default withAuthUser({

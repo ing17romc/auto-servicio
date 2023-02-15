@@ -12,10 +12,10 @@ const { TITLE_NEW } = CONTENT.CERO_HUMEDAD.PRODUCTOS
 const { PRODUCTOS: API } = CONFIG.API.CERO_HUMEDAD
 const { PRODUCTOS: PATH, BASE } = CONFIG.ROUTER.CERO_HUMEDAD
 
-const index = ({ api }) => {
+const index = () => {
 	return (
 		<Layout>
-			<GenericEdit pathRetun={BASE + PATH} title={TITLE_NEW} api={api} />
+			<GenericEdit pathRetun={BASE + PATH} title={TITLE_NEW} api={API} />
 		</Layout>
 	)
 }
@@ -23,7 +23,7 @@ const index = ({ api }) => {
 export const getServerSideProps = withAuthUserTokenSSR({
 	whenUnauthed: AuthAction.REDIRECT_TO_LOGIN
 })(async (props) => {
-	return { props: { api: API } }
+	return { props: { } }
 })
 
 export default withAuthUser({

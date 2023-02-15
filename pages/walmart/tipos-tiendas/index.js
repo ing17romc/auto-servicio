@@ -22,26 +22,26 @@ const tableHeaders =								<tr>
 	<th style={{ width: '10%' }}></th>
 </tr>
 
-const getRows = (dt, api) => {
+const getRows = (dt) => {
 	return dt.map((element, i) => (
 		<tr key={i}>
 			<td style={{ width: '10%' }}>{element.id}</td>
 			<td style={{ width: '60%' }}>{element.nombre}</td>
 			<ColumnStatus width='10%' estado={element.estado} path={BASE + PATH}/>
 			<ColumnEdit width='10%' id={element.id} path={BASE + PATH}/>
-			<ColumnRemove width='10%' id={element.id} api={api} path={BASE + PATH}/>
+			<ColumnRemove width='10%' id={element.id} api={API} path={BASE + PATH}/>
 		</tr>
 	))
 }
 
-const index = ({ data, api }) => (
+const index = ({ data }) => (
 	<Layout>
 		<GenericList
 			title={TITLE}
 			path={BASE + PATH}
 		>
 			{tableHeaders}
-			{getRows(data, api)}
+			{getRows(data)}
 		</GenericList>
 	</Layout>
 )
@@ -54,7 +54,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
 		const response = await fetch(API)
 		const responseJSON = await response.json()
 
-		return { props: { data: responseJSON.data, api: API } }
+		return { props: { data: responseJSON.data } }
 	} catch (error) {
 		console.log(error)
 		return { props: { data: [] } }

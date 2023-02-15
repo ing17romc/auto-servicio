@@ -13,11 +13,11 @@ const { TITLE_EDIT } = CONTENT.WALMART.TIPOS_TIENDAS
 const { TIPOS_TIENDAS: API } = CONFIG.API.WALMART
 const { TIPOS_TIENDAS: PATH, BASE } = CONFIG.ROUTER.WALMART
 
-const edit = ({ data, error, api }) => {
+const edit = ({ data, error }) => {
 	if (error && error.statusCode) { return <Error statusCode={error.statusCode} title={error.statusText} /> }
-	
-	const {id, nombre, estado} = data
-	
+
+	const { id, nombre, estado } = data
+
 	return (
 		<Layout>
 			<GenericEdit
@@ -25,7 +25,7 @@ const edit = ({ data, error, api }) => {
 				nombre={nombre}
 				estado={estado}
 				pathRetun={BASE + PATH}
-				api={api}
+				api={API}
 				title={TITLE_EDIT}
 			/>
 		</Layout>
@@ -40,7 +40,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
 
 		if (response.status === 200) {
 			const data = await response.json()
-			return { props: { data, api: API } } 
+			return { props: { data } }
 		}
 
 		return {

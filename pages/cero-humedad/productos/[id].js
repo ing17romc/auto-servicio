@@ -13,7 +13,7 @@ const { TITLE_EDIT } = CONTENT.CERO_HUMEDAD.PRODUCTOS
 const { PRODUCTOS: API } = CONFIG.API.CERO_HUMEDAD
 const { PRODUCTOS: PATH, BASE } = CONFIG.ROUTER.CERO_HUMEDAD
 
-const edit = ({ data, error, api }) => {
+const edit = ({ data, error }) => {
 	if (error && error.statusCode) { return <Error statusCode={error.statusCode} title={error.statusText} /> }
 
 	const { id, nombre, estado } = data
@@ -25,7 +25,7 @@ const edit = ({ data, error, api }) => {
 				nombre={nombre}
 				estado={estado}
 				pathRetun={BASE + PATH}
-				api={api}
+				api={API}
 				title={TITLE_EDIT}
 			/>
 		</Layout>
@@ -40,7 +40,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
 
 		if (response.status === 200) {
 			const data = await response.json()
-			return { props: { data, api: API } }
+			return { props: { data } }
 		}
 
 		return {

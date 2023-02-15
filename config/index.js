@@ -1,4 +1,6 @@
-const BASE_URL = process.env.NEXT_PUBLIC_URL
+const DEV = process.env.NODE_ENV !== 'production'
+
+const BASE_URL = DEV ? process.env.NEXT_PUBLIC_DEV_URL : process.env.NEXT_PUBLIC_PROD_URL
 
 export const CONFIG = {
 	ROUTER: {
