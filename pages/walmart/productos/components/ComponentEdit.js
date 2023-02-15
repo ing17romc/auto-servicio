@@ -4,7 +4,7 @@ import Error from 'next/error'
 import { useState } from 'react'
 import { STATUS as ESTADOS } from '../../../../constants'
 
-const ComponentEdit = ({ id = 0, newId, nombre, estado, idCeroHumedadProducto, pathRetun, api, title, products, error }) => {
+const ComponentEdit = ({ id = 0, newId, nombre, estado, idCeroHumedadProducto, pathRetun, api, title, products = [], error }) => {
 	if (error && error.statusCode) { return <Error statusCode={error.statusCode} title={error.statusText} /> }
 
 	const { TextBox, Selector } = UI
