@@ -1,19 +1,13 @@
-
 import { UI, functions } from 'edt-lib'
+import Form from 'components/Form'
+import Error from 'next/error'
 import { useState } from 'react'
-import { useRouter } from 'next/router'
 import { STATUS as ESTADOS } from '../constants'
 
-const GenericEdit = ({
-	id = 0,
-	nombre = '',
-	estado = 1,
-	pathRetun,
-	title,
-	api
-}) => {
-	const router = useRouter()
-	const { Title, TextBox, Selector, Button } = UI
+const GenericEdit = ({ id = 0, nombre = '', estado = 1, pathRetun, api, title, error }) => {
+	if (error && error.statusCode) { return <Error statusCode={error.statusCode} title={error.statusText} /> }
+
+	const { TextBox, Selector } = UI
 
 	const [state, setstate] = useState({
 		nombre,
@@ -32,91 +26,35 @@ const GenericEdit = ({
 		}
 	}
 
-	const handleSubmit = async e => {
-		e.preventDefault()
-
-		if (id === 0) {
-			await createElement()
-		} else {
-			await updateElement()
-		}
-
-		await router.push(pathRetun)
-	}
-
-	const createElement = async () => {
-		try {
-			await fetch(api, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(state)
-			})
-		} catch (error) {
-			console.error(error)
-		}
-	}
-
-	const updateElement = async () => {
-		try {
-			await fetch(`${api}/${id}`, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(state)
-			})
-		} catch (error) {
-			console.error(error)
-		}
-	}
-
 	return (
-		<form onSubmit={handleSubmit}>
-			<div className='container-body'>
-				<div className='grid-primary '>
-					<div className='start-1 size-12 padding-v-20'>
-						<Title label={title} />
-					</div>
+		<Form
+			id={id}
+			state={state}
+			pathRetun={pathRetun}
+			title={title}
+			api={api}
 
-					<div className='start-1 size-6 padding-v-20'>
-						<TextBox
-							id='nombre'
-							value={state.nombre}
-							eventChange={e => onInputChange(e)}
-							titleBottom='Nombre'
-						/>
-					</div>
-
-					<div className='size-6 padding-v-20'>
-						<Selector
-							id='estado'
-							value={state.estado}
-							options={ESTADOS}
-							eventChange={e => onInputChange(e)}
-							titleBottom='Estado'
-						/>
-					</div>
-
-					<div className='start-1 size-3 padding-v-20'>
-						<Button
-							title='Regresar'
-							type='secondary'
-							onClick={() => router.push(pathRetun)}
-						/>
-					</div>
-
-					<div className='size-3 padding-v-20'>
-						<Button
-							title='Guardar'
-							type='primary'
-							disabled={!state.nombre}
-						/>
-					</div>
-				</div>
+			disabled={!state.nombre || state.idCeroHumedadProducto === 0 || state.idCeroHumedadProducto === '0' }
+		>
+			<div className='start-1 size-6 padding-v-20'>
+				<TextBox
+					id='nombre'
+					value={state.nombre}
+					eventChange={e => onInputChange(e)}
+					titleBottom='Nombre'
+				/>
 			</div>
-		</form>
+
+			<div className='size-6 padding-v-20'>
+				<Selector
+					id='estado'
+					value={state.estado}
+					options={ESTADOS}
+					eventChange={e => onInputChange(e)}
+					titleBottom='Estado'
+				/>
+			</div>
+		</Form>
 	)
 }
 

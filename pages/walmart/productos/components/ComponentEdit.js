@@ -1,5 +1,5 @@
 import { UI, functions } from 'edt-lib'
-import NewGenericEdit from 'components/NewGenericEdit'
+import Form from 'components/Form'
 import Error from 'next/error'
 import { useState } from 'react'
 import { STATUS as ESTADOS } from '../../../../constants'
@@ -37,7 +37,7 @@ const ComponentEdit = ({ id = 0, newId = 0, nombre = '', estado = 1, idCeroHumed
 	}
 
 	return (
-		<NewGenericEdit
+		<Form
 			id={id}
 			state={state}
 			pathRetun={pathRetun}
@@ -82,7 +82,7 @@ const ComponentEdit = ({ id = 0, newId = 0, nombre = '', estado = 1, idCeroHumed
 					titleBottom='Estado'
 				/>
 			</div>
-		</NewGenericEdit>
+		</Form>
 	)
 }
 

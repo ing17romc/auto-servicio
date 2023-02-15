@@ -21,12 +21,12 @@ const edit = ({ data, error }) => {
 	return (
 		<Layout>
 			<GenericEdit
-				id={id}
-				nombre={nombre}
-				estado={estado}
 				pathRetun={BASE + PATH}
 				api={API}
 				title={TITLE_EDIT}
+				id={id}
+				nombre={nombre}
+				estado={estado}
 			/>
 		</Layout>
 	)

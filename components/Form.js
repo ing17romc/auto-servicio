@@ -2,7 +2,7 @@
 import { UI } from 'edt-lib'
 import { useRouter } from 'next/router'
 
-const NewGenericEdit = ({
+const Form = ({
 	id = 0,
 	state,
 	pathRetun,
@@ -66,7 +66,7 @@ const NewGenericEdit = ({
 
 					{children}
 
-					<div className='start-1 size-3 padding-v-20'>
+					<div className='start-7 size-3 padding-v-20'>
 						<Button
 							title='Regresar'
 							type='secondary'
@@ -87,4 +87,4 @@ const NewGenericEdit = ({
 	)
 }
 
-export default NewGenericEdit
+export default Form
