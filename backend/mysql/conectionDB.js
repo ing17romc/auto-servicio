@@ -21,7 +21,12 @@ function connection () {
 			port: DEV ? DEV_MYSQL_PORT : PROD_MYSQL_PORT,
 			database: DEV ? DEV_MYSQL_DATABASE : PROD_MYSQL_DATABASE,
 			user: DEV ? DEV_MYSQL_USER : PROD_MYSQL_USER,
-			password: DEV ? DEV_MYSQL_PASSWORD : PROD_MYSQL_PASSWORD
+			password: DEV ? DEV_MYSQL_PASSWORD : PROD_MYSQL_PASSWORD,
+			dialectOptions: {
+				ssl: {
+					rejectUnauthorized: true
+				}
+			}
 		}
 
 		const pool = mysql.createPool(config)
