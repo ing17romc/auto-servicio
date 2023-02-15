@@ -9,7 +9,14 @@ const ComponentEdit = ({ id = 0, pathRetun, api, title, data, products, error })
 
 	const { TextBox, Selector } = UI
 
-	const [state, setstate] = useState(data)
+	const { newId, nombre, estado, idCeroHumedadProducto } = data
+
+	const [state, setstate] = useState({
+		newId,
+		nombre,
+		estado,
+		idCeroHumedadProducto
+	})
 
 	const { getValueInput } = functions
 
