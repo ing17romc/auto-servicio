@@ -6,7 +6,7 @@ export const CONTENT = {
 			TITLE_NEW: 'Nueva producto',
 			TITLE_EDIT: 'Editar producto',
 			TITLE: 'Productos'
-		},
+		}
 	},
 	WALMART: {
 		TITLE: 'Walmart',
@@ -24,7 +24,7 @@ export const CONTENT = {
 			TITLE_NEW: 'Nuevo tipo de tienda',
 			TITLE_EDIT: 'Editar tipo de tienda',
 			TITLE: 'Tipos de tiendas'
-		},
+		}
 	},
 	GENERIC: {
 		STATUS: {

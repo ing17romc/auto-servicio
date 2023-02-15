@@ -18,7 +18,7 @@ const tableHeaders =								<tr>
 	<th style={{ width: '10%' }}>{CONTENT.GENERIC.ID}</th>
 	<th style={{ width: '60%' }}>{CONTENT.GENERIC.NAME}</th>
 	<th style={{ width: '10%' }}>{CONTENT.GENERIC.NAME}</th>
-	<th style={{ width: '10%' }}>{CONTENT.GENERIC.ESTADO}</th>
+	<th style={{ width: '10%' }}>{CONTENT.GENERIC.STATUS.NAME}</th>
 	<th style={{ width: '10%' }}></th>
 	<th style={{ width: '10%' }}></th>
 </tr>
