@@ -7,12 +7,12 @@ import {
 } from '../Generic'
 import { getGenericEntities, getGenericEntity } from 'lib/utils'
 
-const SP_FIND_ONE = 'SELECT * FROM WalmartTiposTiendas WHERE id = ?;'
+const SP_FIND_ONE = 'SELECT * FROM Walmart_TiposTiendas WHERE id = ?;'
 // const SP_CONSULT_ALL = 'CALL sp_ObtenerCarreras();';
-const SP_CONSULT_ALL = 'SELECT * FROM WalmartTiposTiendas;'
-const SP_DELETE = 'DELETE FROM WalmartTiposTiendas WHERE id = ?;'
-const SP_INSERT = 'INSERT INTO WalmartTiposTiendas (nombre, estado) VALUES (?,?);'
-const SP_UPDATE = 'UPDATE WalmartTiposTiendas SET nombre = ?, estado = ? WHERE id = ?;'
+const SP_CONSULT_ALL = 'SELECT * FROM Walmart_TiposTiendas;'
+const SP_DELETE = 'DELETE FROM Walmart_TiposTiendas WHERE id = ?;'
+const SP_INSERT = 'INSERT INTO Walmart_TiposTiendas (nombre, estado) VALUES (?,?);'
+const SP_UPDATE = 'UPDATE Walmart_TiposTiendas SET nombre = ?, estado = ? WHERE id = ?;'
 
 export const find = async () => await _find(SP_CONSULT_ALL, getGenericEntities)
 

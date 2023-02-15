@@ -33,12 +33,12 @@ const getEntity = (data) => {
 	}
 }
 
-const SP_FIND_ONE = 'SELECT * FROM WalmartProductos WHERE id = ?;'
+const SP_FIND_ONE = 'SELECT * FROM Walmart_Productos WHERE id = ?;'
 // const SP_CONSULT_ALL = 'CALL sp_ObtenerCarreras();';
-const SP_CONSULT_ALL = 'SELECT WalmartProductos.*, CeroHumedadProductos.nombre nombre_original FROM WalmartProductos LEFT JOIN CeroHumedadProductos ON WalmartProductos.idCeroHumedadProducto = CeroHumedadProductos.id'
-const SP_DELETE = 'DELETE FROM WalmartProductos WHERE id = ?;'
-const SP_INSERT = 'INSERT INTO WalmartProductos (id, nombre, estado, idCeroHumedadProducto) VALUES (?,?,?,?);'
-const SP_UPDATE = 'UPDATE WalmartProductos SET id = ?, nombre = ?, estado = ?, idCeroHumedadProducto = ? WHERE id = ?;'
+const SP_CONSULT_ALL = 'SELECT Walmart_Productos.*, CeroHumedad_Productos.nombre nombre_original FROM Walmart_Productos LEFT JOIN CeroHumedad_Productos ON Walmart_Productos.idCeroHumedadProducto = CeroHumedad_Productos.id'
+const SP_DELETE = 'DELETE FROM Walmart_Productos WHERE id = ?;'
+const SP_INSERT = 'INSERT INTO Walmart_Productos (id, nombre, estado, idCeroHumedadProducto) VALUES (?,?,?,?);'
+const SP_UPDATE = 'UPDATE Walmart_Productos SET id = ?, nombre = ?, estado = ?, idCeroHumedadProducto = ? WHERE id = ?;'
 
 export const find = async () => await _find(SP_CONSULT_ALL, getEntities)
 

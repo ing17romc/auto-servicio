@@ -5,33 +5,33 @@ import {
 	update as _update,
 	deleteById as _deleteById
 } from '../Generic'
-import { getGenericEntities, getGenericEntity} from 'lib/utils'
+import { getGenericEntities, getGenericEntity } from 'lib/utils'
 
-const SP_FIND_ONE = 'SELECT * FROM CeroHumedadProductos WHERE id = ?;'
+const SP_FIND_ONE = 'SELECT * FROM CeroHumedad_Productos WHERE id = ?;'
 // const SP_CONSULT_ALL = 'CALL sp_ObtenerCarreras();';
-const SP_CONSULT_ALL = 'SELECT * FROM CeroHumedadProductos;'
-const SP_DELETE = 'DELETE FROM CeroHumedadProductos WHERE id = ?;'
-const SP_INSERT = 'INSERT INTO CeroHumedadProductos (nombre, estado) VALUES (?,?);'
-const SP_UPDATE = 'UPDATE CeroHumedadProductos SET nombre = ?, estado = ? WHERE id = ?;'
+const SP_CONSULT_ALL = 'SELECT * FROM CeroHumedad_Productos;'
+const SP_DELETE = 'DELETE FROM CeroHumedad_Productos WHERE id = ?;'
+const SP_INSERT = 'INSERT INTO CeroHumedad_Productos (nombre, estado) VALUES (?,?);'
+const SP_UPDATE = 'UPDATE CeroHumedad_Productos SET nombre = ?, estado = ? WHERE id = ?;'
 
 export const find = async () => await _find(SP_CONSULT_ALL, getGenericEntities)
 
 export const save = async ({ nombre, estado }) => {
 	const params = []
-	params.push (nombre)
-	params.push (estado)
+	params.push(nombre)
+	params.push(estado)
 
 	return await _save(params, SP_INSERT)
 }
 
 export const findById = async (id) => await _findById(id, SP_FIND_ONE, getGenericEntity)
 
-export const update = async ({ id, nombre, estado }) => {	
+export const update = async ({ id, nombre, estado }) => {
 	const params = []
-	params.push (nombre)
-	params.push (estado)
-	params.push (id)
-	
+	params.push(nombre)
+	params.push(estado)
+	params.push(id)
+
 	return await _update(params, SP_UPDATE)
 }
 
