@@ -20,12 +20,10 @@ const index = ({ api, products }) => {
 				pathRetun={BASE + PATH}
 				api={api}
 				title={TITLE_NEW}
-				data={{
-					newId: 0,
-					nombre: '',
-					estado: 1,
-					idCeroHumedadProducto: 0
-				}}
+				newId= {0}
+				nombre= {''}
+				estado= {1}
+				idCeroHumedadProducto= {0}
 				products={products}
 			>
 			</ComponentEdit>

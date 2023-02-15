@@ -26,12 +26,10 @@ const edit = ({ data, error, api, products }) => {
 				pathRetun={BASE + PATH}
 				api={api}
 				title={TITLE_EDIT}
-				data={{
-					newId: id,
-					nombre,
-					estado,
-					idCeroHumedadProducto
-				}}
+				newId= {id}
+				nombre= {nombre}
+				estado= {estado}
+				idCeroHumedadProducto= {idCeroHumedadProducto}
 				products={products}
 			>
 			</ComponentEdit>
