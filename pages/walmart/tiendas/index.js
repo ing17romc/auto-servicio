@@ -40,7 +40,7 @@ const index = ({ data }) => {
 	const { getValueInput } = functions
 	const [state, setstate] = useState({
 		page: 1,
-		pages: 100
+		pages: 200
 	})
 
 	const getSlides = (acc, cur, slidesPerView) => {
@@ -87,8 +87,8 @@ const index = ({ data }) => {
 								value={state.pages.toString()}
 								options={[
 									{ key: '100', value: '100' },
-									{ key: '125', value: '125' },
-									{ key: '150', value: '150' }
+									{ key: '200', value: '200' },
+									{ key: '300', value: '300' }
 								]}
 								eventChange={e => onInputChange(e)}
 								titleTop='Number item by page'
