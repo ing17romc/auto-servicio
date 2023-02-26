@@ -40,7 +40,7 @@ const index = ({ data }) => {
 	const { getValueInput } = functions
 	const [state, setstate] = useState({
 		page: 1,
-		pages: 200
+		pages: 300
 	})
 
 	const getSlides = (acc, cur, slidesPerView) => {

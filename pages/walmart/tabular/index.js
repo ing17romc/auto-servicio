@@ -48,7 +48,7 @@ const index = ({ data, options, anioSemana }) => {
 	const { getValueInput } = functions
 	const [state, setstate] = useState({
 		page: 1,
-		pages: 400,
+		pages: 500,
 		anioSemana,
 		dt: data
 	})
