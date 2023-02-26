@@ -23,7 +23,7 @@ export const save = async (params, SP) => {
 	try {
 		const result = await excuteQuery({
 			query: SP,
-			params: params
+			params
 		})
 		return result && result.affectedRows === 1
 	} catch (error) {
@@ -49,7 +49,7 @@ export const update = async (params, SP) => {
 	try {
 		const result = await excuteQuery({
 			query: SP,
-			params: params
+			params
 		})
 		return result && result.affectedRows === 1
 	} catch (error) {

@@ -15,7 +15,7 @@ export const CONTENT = {
 			TITLE_EDIT: 'Editar producto',
 			TITLE: 'Productos'
 		},
-		TIENDA: {
+		TIENDAS: {
 			TITLE_NEW: 'Nueva tienda',
 			TITLE_EDIT: 'Editar tienda',
 			TITLE: 'Tiendas'
@@ -24,6 +24,12 @@ export const CONTENT = {
 			TITLE_NEW: 'Nuevo tipo de tienda',
 			TITLE_EDIT: 'Editar tipo de tienda',
 			TITLE: 'Tipos de tiendas'
+		},
+		TABULAR: {
+			TITLE: 'Tabular'
+		},
+		LOG: {
+			TITLE: 'Log'
 		}
 	},
 	GENERIC: {

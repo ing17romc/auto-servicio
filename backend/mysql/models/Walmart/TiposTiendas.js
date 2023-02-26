@@ -18,19 +18,19 @@ export const find = async () => await _find(SP_CONSULT_ALL, getGenericEntities)
 
 export const save = async ({ nombre, estado }) => {
 	const params = []
-	params.push (nombre)
-	params.push (estado)
+	params.push(nombre)
+	params.push(estado)
 	return await _save(params, SP_INSERT)
 }
 
 export const findById = async (id) => await _findById(id, SP_FIND_ONE, getGenericEntity)
 
-export const update = async ({ id, nombre, estado }) => {	
+export const update = async ({ id, nombre, estado }) => {
 	const params = []
-	params.push (nombre)
-	params.push (estado)
-	params.push (id)
-	
+	params.push(nombre)
+	params.push(estado)
+	params.push(id)
+
 	return await _update(params, SP_UPDATE)
 }
 
