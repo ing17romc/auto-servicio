@@ -5,6 +5,8 @@ import {
 
 const SP_CONSULT_ALL = 'SELECT * FROM Walmart_Tabular WHERE anio = ? and semana = ? ;'
 
+const SP_TOTALES = 'SELECT sum(cantidadVendida) totalVentaCantidad, ROUND(sum(totalPrecio), 2) totalVentaPrecio, sum(inventario) totalInventario FROM autoservicios.Walmart_Tabular WHERE anio = ? and semana = ? ;'
+
 const SP_ANIO_SEMANA = 'SELECT distinct anio, semana FROM autoservicios.Walmart_Tabular ORDER BY anio DESC, semana DESC;'
 
 export const getAnioSemana = async () => {
@@ -24,11 +26,15 @@ export const find = async ({ anio, semana }) => {
 	params.push(anio)
 	params.push(semana)
 	try {
-		const result = await excuteQuery({
+		const totales = await excuteQuery({
+			query: SP_TOTALES,
+			params
+		})
+		const resultados = await excuteQuery({
 			query: SP_CONSULT_ALL,
 			params
 		})
-		return result
+		return { totales, resultados }
 	} catch (error) {
 		console.log(error)
 		return false

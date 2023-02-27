@@ -64,7 +64,7 @@ const index = ({ data, options, anioSemana }) => {
 		return acc
 	}
 
-	const pages = getSlides([], state.dt, state.pages)
+	const pages = getSlides([], state.dt.resultados, state.pages)
 
 	const getIndex = pages.length < state.page ? 0 : state.page - 1
 
@@ -105,6 +105,10 @@ const index = ({ data, options, anioSemana }) => {
 		}
 	}
 
+	const numberFormat = (number) => {
+		return new Intl.NumberFormat('es-MX').format(number)
+	}
+
 	return (
 		<Layout>
 			<UI.Spinner show={loading}/>
@@ -128,6 +132,31 @@ const index = ({ data, options, anioSemana }) => {
 								eventChange={e => onInputChange(e)}
 								titleTop='Año - Semana'
 							/>
+						</div>
+
+						<div className="start-6  size-5 padding-v-20">
+							<h5>Venta unidades</h5>
+							<h4 className=" padding-v-20">{
+								state.dt.totales && state.dt.totales.length > 0
+									? numberFormat(state.dt.totales[0].totalVentaCantidad)
+									: 0
+							}</h4>
+						</div>
+						<div className=" size-5 padding-v-20">
+							<h5>Venta pesos</h5>
+							<h4 className=" padding-v-20">$ {
+								state.dt.totales && state.dt.totales.length > 0
+									? numberFormat(state.dt.totales[0].totalVentaPrecio)
+									: 0
+							}</h4>
+						</div>
+						<div className=" size-4 padding-v-20">
+							<h5>Inventario</h5>
+							<h4 className=" padding-v-20">$ {
+								state.dt.totales && state.dt.totales.length > 0
+									? numberFormat(state.dt.totales[0].totalInventario)
+									: 0
+							}</h4>
 						</div>
 
 						<div className="start-20 size-5 padding-v-20">
