@@ -4,15 +4,13 @@ import { CONTENT } from 'content'
 const { CERO_HUMEDAD, WALMART, START_APP, EXIT_APP } = CONFIG.ROUTER
 const { GENERIC } = CONTENT
 
-export const TABLE_HEADERS = [GENERIC.ID, GENERIC.NAME, GENERIC.STATUS.NAME]
-
 export const STATUS = [
 	{ key: '0', value: GENERIC.STATUS.INACTIVE },
 	{ key: '1', value: GENERIC.STATUS.ACTIVE }
 ]
 
-export const LEFT_OPTIONS = [{ path: START_APP, name: GENERIC.MENU }]
-export const RIGHT_OPTIONS = [{ path: EXIT_APP, name: GENERIC.EXIT }]
+export const LEFT_OPTIONS = [{ path: START_APP, name: 'Menu' }]
+export const RIGHT_OPTIONS = [{ path: EXIT_APP, name: 'Logout' }]
 
 export const MENU_OPTIONS = [
 	{ path: CERO_HUMEDAD.BASE, name: CONTENT.CERO_HUMEDAD.TITLE, icon: 'list' },

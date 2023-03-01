@@ -13,7 +13,7 @@ export const getAnioSemana = async () => {
 	try {
 		// const data = await excuteSP(SP);
 		const data = await excuteQuery({ query: SP_ANIO_SEMANA })
-		console.log(data)
+		// console.log(data)
 		return data
 	} catch (error) {
 		console.log(error)

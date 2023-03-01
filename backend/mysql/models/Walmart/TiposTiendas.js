@@ -5,7 +5,6 @@ import {
 	update as _update,
 	deleteById as _deleteById
 } from '../Generic'
-import { getGenericEntities, getGenericEntity } from 'lib/utils'
 
 const SP_FIND_ONE = 'SELECT * FROM Walmart_TiposTiendas WHERE id = ?;'
 // const SP_CONSULT_ALL = 'CALL sp_ObtenerCarreras();';
@@ -14,7 +13,7 @@ const SP_DELETE = 'DELETE FROM Walmart_TiposTiendas WHERE id = ?;'
 const SP_INSERT = 'INSERT INTO Walmart_TiposTiendas (nombre, estado) VALUES (?,?);'
 const SP_UPDATE = 'UPDATE Walmart_TiposTiendas SET nombre = ?, estado = ? WHERE id = ?;'
 
-export const find = async () => await _find(SP_CONSULT_ALL, getGenericEntities)
+export const find = async () => await _find(SP_CONSULT_ALL)
 
 export const save = async ({ nombre, estado }) => {
 	const params = []
@@ -23,7 +22,7 @@ export const save = async ({ nombre, estado }) => {
 	return await _save(params, SP_INSERT)
 }
 
-export const findById = async (id) => await _findById(id, SP_FIND_ONE, getGenericEntity)
+export const findById = async (id) => await _findById(id, SP_FIND_ONE)
 
 export const update = async ({ id, nombre, estado }) => {
 	const params = []

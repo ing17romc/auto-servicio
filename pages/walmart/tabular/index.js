@@ -14,14 +14,14 @@ const { TITLE } = CONTENT.WALMART.TABULAR
 const { TABULAR: API } = CONFIG.API.WALMART
 
 const tableHeaders =								<tr>
-	<th style={{ width: '10%' }}>codigoProducto</th>
-	<th style={{ width: '10%' }}>codigoTienda</th>
-	<th style={{ width: '10%' }}>precioVentaUnidad</th>
-	<th style={{ width: '10%' }}>costoUnidad</th>
-	<th style={{ width: '10%' }}>cantidadVendida</th>
+	<th style={{ width: '35%' }}>Producto</th>
+	<th style={{ width: '35%' }}>Tienda</th>
+	<th style={{ width: '5%', textAlign: 'right' }}>Precio</th>
+	<th style={{ width: '5%', textAlign: 'right' }}>Costo</th>
+	<th style={{ width: '5%', textAlign: 'right' }}>VU</th>
 
-	<th style={{ width: '10%' }}>totalPrecio</th>
-	<th style={{ width: '10%' }}>inventario</th>
+	<th style={{ width: '10%', textAlign: 'right' }}>VP</th>
+	<th style={{ width: '5%', textAlign: 'right' }}>Inv.</th>
 
 </tr>
 
@@ -29,14 +29,14 @@ const getRows = (pages, getIndex) => {
 	if (pages.length === 0) return <tr></tr>
 	return pages[getIndex].map((element, i) => (
 		<tr key={i}>
-			<td style={{ width: '10%' }}>{element.codigoProducto}</td>
-			<td style={{ width: '10%' }}>{element.codigoTienda}</td>
-			<td style={{ width: '10%' }}>{element.precioVentaUnidad}</td>
-			<td style={{ width: '10%' }}>{element.costoUnidad}</td>
-			<td style={{ width: '10%' }}>{element.cantidadVendida}</td>
+			<td style={{ width: '35%' }}>{element.codigoProducto}</td>
+			<td style={{ width: '35%' }}>{element.codigoTienda}</td>
+			<td style={{ width: '5%', textAlign: 'right' }}>{element.precioVentaUnidad}</td>
+			<td style={{ width: '5%', textAlign: 'right' }}>{element.costoUnidad}</td>
+			<td style={{ width: '5%', textAlign: 'right' }}>{element.cantidadVendida}</td>
 
-			<td style={{ width: '10%' }}>{element.totalPrecio}</td>
-			<td style={{ width: '10%' }}>{element.inventario}</td>
+			<td style={{ width: '10%', textAlign: 'right' }}>{element.totalPrecio}</td>
+			<td style={{ width: '5%', textAlign: 'right' }}>{element.inventario}</td>
 
 		</tr>
 	))
@@ -90,7 +90,7 @@ const index = ({ data, options, anioSemana }) => {
 					...state,
 					[object.key]: object.value,
 					page: 1,
-					dt: responseJSON.data
+					dt: responseJSON.result
 				})
 			}
 			setLoading(false)
@@ -221,12 +221,12 @@ export const getServerSideProps = withAuthUserTokenSSR({
 
 		const options = []
 
-		for (const iterator of anioSemanaJSON.data) {
+		for (const iterator of anioSemanaJSON.result) {
 			options.push({ key: `${iterator.anio}-${iterator.semana}`, value: `${iterator.anio}-${iterator.semana}` })
 		}
 
-		const anio = anioSemanaJSON.data[0].anio
-		const semana = anioSemanaJSON.data[0].semana
+		const anio = anioSemanaJSON.result[0].anio
+		const semana = anioSemanaJSON.result[0].semana
 
 		console.log(API)
 		const response = await fetch(API, {
@@ -238,7 +238,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
 		})
 		const responseJSON = await response.json()
 
-		return { props: { data: responseJSON.data, options, anioSemana: `${anio}-${semana}` } }
+		return { props: { data: responseJSON.result, options, anioSemana: `${anio}-${semana}` } }
 	} catch (error) {
 		console.log(error)
 		return { props: { data: [], anioSemanaJSON: [] } }

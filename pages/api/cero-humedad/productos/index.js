@@ -9,7 +9,7 @@ const index = async (req, res) => {
 	case 'GET':
 		return get_all_generic(res, find)
 	case 'POST':
-		return post_generic(res, body, save)
+		return post_generic(res, save, body)
 
 	default:
 		return res

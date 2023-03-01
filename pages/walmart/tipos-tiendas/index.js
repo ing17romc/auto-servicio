@@ -52,9 +52,10 @@ export const getServerSideProps = withAuthUserTokenSSR({
 	try {
 		console.log(API)
 		const response = await fetch(API)
+		console.log(response.data)
 		const responseJSON = await response.json()
 
-		return { props: { data: responseJSON.data } }
+		return { props: { data: responseJSON.result } }
 	} catch (error) {
 		console.log(error)
 		return { props: { data: [] } }

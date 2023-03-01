@@ -6,33 +6,6 @@ import {
 	deleteById as _deleteById
 } from '../Generic'
 
-const getEntities = (list) => {
-	const data = []
-	list.forEach((row) =>
-		data.push({
-			id: row.id,
-			nombre: row.nombre,
-			estado: row.estado,
-			idCeroHumedadProducto: row.idCeroHumedadProducto,
-			nombre_original: row.nombre_original
-		})
-	)
-	return data
-}
-
-const getEntity = (data) => {
-	if (data.length) {
-		return {
-			id: data[0].id,
-			nombre: data[0].nombre,
-			estado: data[0].estado,
-			idCeroHumedadProducto: data[0].idCeroHumedadProducto
-		}
-	} else {
-		return null
-	}
-}
-
 const SP_FIND_ONE = 'SELECT * FROM Walmart_Productos WHERE id = ?;'
 // const SP_CONSULT_ALL = 'CALL sp_ObtenerCarreras();';
 const SP_CONSULT_ALL = 'SELECT Walmart_Productos.*, CeroHumedad_Productos.nombre nombre_original FROM Walmart_Productos LEFT JOIN CeroHumedad_Productos ON Walmart_Productos.idCeroHumedadProducto = CeroHumedad_Productos.id'
@@ -40,7 +13,7 @@ const SP_DELETE = 'DELETE FROM Walmart_Productos WHERE id = ?;'
 const SP_INSERT = 'INSERT INTO Walmart_Productos (id, nombre, estado, idCeroHumedadProducto) VALUES (?,?,?,?);'
 const SP_UPDATE = 'UPDATE Walmart_Productos SET id = ?, nombre = ?, estado = ?, idCeroHumedadProducto = ? WHERE id = ?;'
 
-export const find = async () => await _find(SP_CONSULT_ALL, getEntities)
+export const find = async () => await _find(SP_CONSULT_ALL)
 
 export const save = async ({ newId, nombre, estado, idCeroHumedadProducto }) => {
 	const params = []
@@ -51,7 +24,7 @@ export const save = async ({ newId, nombre, estado, idCeroHumedadProducto }) => 
 	return await _save(params, SP_INSERT)
 }
 
-export const findById = async (id) => await _findById(id, SP_FIND_ONE, getEntity)
+export const findById = async (id) => await _findById(id, SP_FIND_ONE)
 
 export const update = async ({ newId, nombre, estado, idCeroHumedadProducto, id }) => {
 	const params = []

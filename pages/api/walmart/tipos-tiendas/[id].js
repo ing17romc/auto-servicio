@@ -11,11 +11,11 @@ const index = async (req, res) => {
 
 	switch (method) {
 	case 'GET':
-		return get_id_generic(res, id, findById)
+		return get_id_generic(res, findById, id)
 	case 'PUT':
-		return put_generic(res, { id, nombre, estado }, update)
+		return put_generic(res, update, { id, nombre, estado })
 	case 'DELETE':
-		return delete_generic(res, id, deleteById)
+		return delete_generic(res, deleteById, id)
 
 	default:
 		return res

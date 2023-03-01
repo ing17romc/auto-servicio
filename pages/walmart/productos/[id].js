@@ -48,7 +48,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
 
 		if (response.status === 200) {
 			const data = await response.json()
-			return { props: { data, api: API, products: responseJSON.data } }
+			return { props: { data, api: API, products: responseJSON.result } }
 		}
 
 		return {

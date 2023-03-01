@@ -3,13 +3,13 @@ import {
 	excuteQuery
 } from '../db'
 
-export const find = async (SP, getEntities) => {
+export const find = async (SP) => {
 	console.log(SP)
 	try {
 		// const data = await excuteSP(SP);
 		const data = await excuteQuery({ query: SP })
-		console.log(data)
-		return getEntities(data)
+		// console.log(data)
+		return data
 	} catch (error) {
 		console.log(error)
 		return []
@@ -32,12 +32,12 @@ export const save = async (params, SP) => {
 	}
 }
 
-export const findById = async (id, SP, getEntity) => {
+export const findById = async (id, SP) => {
 	console.log(SP)
 	try {
 		const data = await excuteQuery({ query: SP, params: [id] })
-		console.log(data)
-		return getEntity(data)
+		// console.log(data)
+		return data[0]
 	} catch (error) {
 		console.log(error)
 		return null
