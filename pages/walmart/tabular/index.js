@@ -11,11 +11,13 @@ import { UI, functions } from 'edt-lib'
 import React, { useState } from 'react'
 
 const { TITLE } = CONTENT.WALMART.TABULAR
-const { TABULAR: API } = CONFIG.API.WALMART
+const { TABULAR: API_TABULAR, PRODUCTOS: API_PRODUCTOS, TIPOS_TIENDAS: API_TIPOS_TIENDAS } = CONFIG.API.WALMART
 
-const tableHeaders =								<tr>
-	<th style={{ width: '35%' }}>Producto</th>
-	<th style={{ width: '35%' }}>Tienda</th>
+const tableHeaders = <tr>
+	<th style={{ width: '25%' }}>Producto</th>
+	<th style={{ width: '10%' }}>Nombre</th>
+	<th style={{ width: '25%' }}>Tienda</th>
+	<th style={{ width: '10%' }}>Tipo Tienda</th>
 	<th style={{ width: '5%', textAlign: 'right' }}>Precio</th>
 	<th style={{ width: '5%', textAlign: 'right' }}>Costo</th>
 	<th style={{ width: '5%', textAlign: 'right' }}>VU</th>
@@ -29,8 +31,10 @@ const getRows = (pages, getIndex) => {
 	if (pages.length === 0) return <tr></tr>
 	return pages[getIndex].map((element, i) => (
 		<tr key={i}>
-			<td style={{ width: '35%' }}>{element.codigoProducto}</td>
-			<td style={{ width: '35%' }}>{element.codigoTienda}</td>
+			<td style={{ width: '25%' }}>{`${element.codigoProducto} - ${element.wp_nombre}`}</td>
+			<td style={{ width: '10%' }}>{element.chp_nombre}</td>
+			<td style={{ width: '25%' }}>{`${element.codigoTienda} ${element.wt_nombre}`}</td>
+			<td style={{ width: '10%' }}>{element.wtt_nombre}</td>
 			<td style={{ width: '5%', textAlign: 'right' }}>{element.precioVentaUnidad}</td>
 			<td style={{ width: '5%', textAlign: 'right' }}>{element.costoUnidad}</td>
 			<td style={{ width: '5%', textAlign: 'right' }}>{element.cantidadVendida}</td>
@@ -42,7 +46,7 @@ const getRows = (pages, getIndex) => {
 	))
 }
 
-const index = ({ data, options, anioSemana }) => {
+const index = ({ data, options, anioSemana, optionsProducts, optionsTypeStore }) => {
 	const { Title } = UI
 
 	const { getValueInput } = functions
@@ -50,6 +54,8 @@ const index = ({ data, options, anioSemana }) => {
 		page: 1,
 		pages: 500,
 		anioSemana,
+		idTipoTienda: 0,
+		idProducto: 0,
 		dt: data
 	})
 	const [loading, setLoading] = React.useState(false)
@@ -71,16 +77,25 @@ const index = ({ data, options, anioSemana }) => {
 	const onInputChange = async e => {
 		const object = getValueInput(e)
 
-		console.log(object)
+		// console.log(object)
 
-		if (object.key === 'anioSemana') {
+		// console.log(state.anioSemana)
+		// console.log(state.idProducto)
+		// console.log(state.idTipoTienda)
+
+		if (object.key === 'anioSemana' || object.key === 'idProducto' || object.key === 'idTipoTienda') {
 			setLoading(true)
-			const values = object.value.split('-')
-			const response = await fetch(API, {
+			const values = (object.key === 'anioSemana') ? object.value.split('-') : state.anioSemana.split('-')
+			const idProducto = (object.key === 'idProducto') ? object.value : state.idProducto
+			const idTipoTienda = (object.key === 'idTipoTienda') ? object.value : state.idTipoTienda
+
+			const response = await fetch(API_TABULAR, {
 				headers: {
 					'Content-Type': 'application/json',
 					anio: values[0],
-					semana: values[1]
+					semana: values[1],
+					idProducto,
+					idTipoTienda
 				}
 			})
 			const responseJSON = await response.json()
@@ -120,11 +135,11 @@ const index = ({ data, options, anioSemana }) => {
 
 					<div className="start-1  padding-v-30" />
 					<div className="grid-secondary bg-light-gray elevated">
-						<div className="start-1 size-10 padding-v-30">
+						<div className="start-1 size-8 padding-v-30">
 							<h3> Listado... </h3>
 						</div>
 
-						<div className="start-1 size-3 padding-v-20">
+						<div className="start-1 size-4 padding-v-20">
 							<UI.Selector
 								id='anioSemana'
 								value={state.anioSemana}
@@ -134,32 +149,26 @@ const index = ({ data, options, anioSemana }) => {
 							/>
 						</div>
 
-						<div className="start-6  size-5 padding-v-20">
-							<h5>Venta unidades</h5>
-							<h4 className=" padding-v-20">{
-								state.dt.totales && state.dt.totales.length > 0
-									? numberFormat(state.dt.totales[0].totalVentaCantidad)
-									: 0
-							}</h4>
+						<div className=" size-8 padding-v-20">
+							<UI.Selector
+								id='idProducto'
+								value={state.idProducto}
+								options={optionsProducts}
+								eventChange={e => onInputChange(e)}
+								titleTop='Producto'
+							/>
 						</div>
-						<div className=" size-5 padding-v-20">
-							<h5>Venta pesos</h5>
-							<h4 className=" padding-v-20">$ {
-								state.dt.totales && state.dt.totales.length > 0
-									? numberFormat(state.dt.totales[0].totalVentaPrecio)
-									: 0
-							}</h4>
-						</div>
-						<div className=" size-4 padding-v-20">
-							<h5>Inventario</h5>
-							<h4 className=" padding-v-20">$ {
-								state.dt.totales && state.dt.totales.length > 0
-									? numberFormat(state.dt.totales[0].totalInventario)
-									: 0
-							}</h4>
+						<div className=" size-8 padding-v-20">
+							<UI.Selector
+								id='idTipoTienda'
+								value={state.idTipoTienda}
+								options={optionsTypeStore}
+								eventChange={e => onInputChange(e)}
+								titleTop='Tipo tienda'
+							/>
 						</div>
 
-						<div className="start-20 size-5 padding-v-20">
+						<div className="size-4 padding-v-20">
 							<UI.Selector
 								id='pages'
 								value={state.pages.toString()}
@@ -171,8 +180,33 @@ const index = ({ data, options, anioSemana }) => {
 									{ key: '500', value: '500' }
 								]}
 								eventChange={e => onInputChange(e)}
-								titleTop='Number item by page'
+								titleTop='Registros por pagina'
 							/>
+						</div>
+
+						<div className="start-14  size-3 padding-v-20">
+							<h5>Venta unidades</h5>
+							<h4 className=" padding-v-20">{
+								state.dt.resultados && state.dt.resultados.length > 0
+									? numberFormat(state.dt.resultados.reduce((sum, value) => (typeof value.cantidadVendida === 'number' ? sum + value.cantidadVendida : sum), 0))
+									: 0
+							}</h4>
+						</div>
+						<div className=" size-4 padding-v-20">
+							<h5>Venta pesos</h5>
+							<h4 className=" padding-v-20">$ {
+								state.dt.resultados && state.dt.resultados.length > 0
+									? numberFormat(state.dt.resultados.reduce((sum, value) => (typeof value.totalPrecio === 'number' ? sum + value.totalPrecio : sum), 0))
+									: 0
+							}</h4>
+						</div>
+						<div className=" size-3 padding-v-20">
+							<h5>Inventario</h5>
+							<h4 className=" padding-v-20">{
+								state.dt.resultados && state.dt.resultados.length > 0
+									? numberFormat(state.dt.resultados.reduce((sum, value) => (typeof value.inventario === 'number' ? sum + value.inventario : sum), 0))
+									: 0
+							}</h4>
 						</div>
 
 						<div className='start-1 size-24 padding-v-20 center'>
@@ -215,11 +249,29 @@ export const getServerSideProps = withAuthUserTokenSSR({
 	whenUnauthed: AuthAction.REDIRECT_TO_LOGIN
 })(async () => {
 	try {
-		console.log(API)
-		const anioSemana = await fetch(`${API}/anio-semana`)
+		console.log(API_TABULAR)
+		const anioSemana = await fetch(`${API_TABULAR}/anio-semana`)
 		const anioSemanaJSON = await anioSemana.json()
 
+		console.log(API_PRODUCTOS)
+		const productos = await fetch(`${API_PRODUCTOS}`)
+		const productosJSON = await productos.json()
+
+		console.log(API_TIPOS_TIENDAS)
+		const tipoTiendas = await fetch(`${API_TIPOS_TIENDAS}`)
+		const tipoTiendasJSON = await tipoTiendas.json()
+
 		const options = []
+		const optionsProducts = [{ key: '0', value: 'Selecionar' }]
+		const optionsTypeStore = [{ key: '0', value: 'Selecionar' }]
+
+		for (const iterator of productosJSON.result) {
+			optionsProducts.push({ key: `${iterator.id}`, value: `${iterator.id} - ${iterator.nombre} - ${iterator.nombre_original}` })
+		}
+
+		for (const iterator of tipoTiendasJSON.result) {
+			optionsTypeStore.push({ key: `${iterator.id}`, value: `${iterator.nombre}` })
+		}
 
 		for (const iterator of anioSemanaJSON.result) {
 			options.push({ key: `${iterator.anio}-${iterator.semana}`, value: `${iterator.anio}-${iterator.semana}` })
@@ -228,20 +280,22 @@ export const getServerSideProps = withAuthUserTokenSSR({
 		const anio = anioSemanaJSON.result[0].anio
 		const semana = anioSemanaJSON.result[0].semana
 
-		console.log(API)
-		const response = await fetch(API, {
+		console.log(API_TABULAR)
+		const response = await fetch(API_TABULAR, {
 			headers: {
 				'Content-Type': 'application/json',
 				anio,
-				semana
+				semana,
+				idTipoTienda: 0,
+				idProducto: 0
 			}
 		})
 		const responseJSON = await response.json()
 
-		return { props: { data: responseJSON.result, options, anioSemana: `${anio}-${semana}` } }
+		return { props: { data: responseJSON.result, options, anioSemana: `${anio}-${semana}`, optionsProducts, optionsTypeStore } }
 	} catch (error) {
 		console.log(error)
-		return { props: { data: [], anioSemanaJSON: [] } }
+		return { props: { data: [], anioSemanaJSON: [], optionsProducts: [], optionsTypeStore: [] } }
 	}
 })
 

@@ -5,12 +5,12 @@ import { get_all_generic } from 'lib/apiGeneric'
 const index = async (req, res) => {
 	const {
 		method,
-		headers: { anio, semana }
+		headers: { anio, semana, idtipotienda, idproducto }
 	} = req
 
 	switch (method) {
 	case 'GET':
-		return get_all_generic(res, find, { anio, semana })
+		return get_all_generic(res, find, { anio, semana, idtipotienda, idproducto })
 
 	default:
 		return res
