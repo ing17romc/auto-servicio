@@ -1,7 +1,7 @@
 
 import Layout from 'components/Layout'
 import { CONFIG } from 'config'
-import { Graficas } from './graficas.js'
+import Graficas from './graficas.js'
 import {
 	AuthAction,
 	withAuthUser,

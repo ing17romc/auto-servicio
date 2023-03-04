@@ -52,7 +52,7 @@ const getData = (d, labels, dataSetTitle) => {
 	return data
 }
 
-export function Graficas ({ chartsTitle, dataSetTitle, data, labels }) {
+export default function Graficas ({ chartsTitle, dataSetTitle, data, labels }) {
 	const dataFormatter = getData(data, labels, dataSetTitle)
 	return <Line options={getOptions(chartsTitle)} data={dataFormatter} />
 }
