@@ -26,7 +26,7 @@ export const MENU_WALMART = [
 	{ path: WALMART.BASE + WALMART.TIENDAS, name: CONTENT.WALMART.TIENDAS.TITLE, icon: 'list' },
 	{ path: WALMART.BASE + WALMART.PRODUCTOS, name: CONTENT.WALMART.PRODUCTOS.TITLE, icon: 'list' },
 	{ path: WALMART.BASE + WALMART.TABULAR, name: CONTENT.WALMART.TABULAR.TITLE, icon: 'list' },
-	{ path: WALMART.BASE + WALMART.LOG, name: CONTENT.WALMART.LOG.TITLE, icon: 'list' }
+	{ path: WALMART.BASE + WALMART.GRAFICAS, name: CONTENT.WALMART.GRAFICAS.TITLE, icon: 'list' }
 ]
 
 export const BASE_URL = process.env.BASE_URL

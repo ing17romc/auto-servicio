@@ -17,7 +17,7 @@ export const CONFIG = {
 			TIPOS_TIENDAS: '/tipos-tiendas',
 			TIENDAS: '/tiendas',
 			TABULAR: '/tabular',
-			LOG: '/log'
+			GRAFICAS: '/graficas'
 		},
 		USUARIOS: {
 			USER: '/Auth/User',
@@ -34,7 +34,8 @@ export const CONFIG = {
 			PRODUCTOS: `${BASE_URL}/api/walmart/productos`,
 			TIPOS_TIENDAS: `${BASE_URL}/api/walmart/tipos-tiendas`,
 			TIENDAS: `${BASE_URL}/api/walmart/tiendas`,
-			TABULAR: `${BASE_URL}/api/walmart/tabular`
+			TABULAR: `${BASE_URL}/api/walmart/tabular`,
+			GRAFICAS: `${BASE_URL}/api/walmart/tabular/graficas`
 		}
 	}
 }

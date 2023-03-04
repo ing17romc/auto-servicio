@@ -27,6 +27,10 @@ const tableHeaders = <tr>
 
 </tr>
 
+const numberFormat = (number) => {
+	return new Intl.NumberFormat('es-MX').format(number)
+}
+
 const getRows = (pages, getIndex) => {
 	if (pages.length === 0) return <tr></tr>
 	return pages[getIndex].map((element, i) => (
@@ -35,12 +39,12 @@ const getRows = (pages, getIndex) => {
 			<td style={{ width: '10%' }}>{element.chp_nombre}</td>
 			<td style={{ width: '25%' }}>{`${element.codigoTienda} ${element.wt_nombre}`}</td>
 			<td style={{ width: '10%' }}>{element.wtt_nombre}</td>
-			<td style={{ width: '5%', textAlign: 'right' }}>{element.precioVentaUnidad}</td>
-			<td style={{ width: '5%', textAlign: 'right' }}>{element.costoUnidad}</td>
-			<td style={{ width: '5%', textAlign: 'right' }}>{element.cantidadVendida}</td>
+			<td style={{ width: '5%', textAlign: 'right' }}>$ {numberFormat(element.precioVentaUnidad)}</td>
+			<td style={{ width: '5%', textAlign: 'right' }}>$ {numberFormat(element.costoUnidad)}</td>
+			<td style={{ width: '5%', textAlign: 'right' }}>{numberFormat(element.cantidadVendida)}</td>
 
-			<td style={{ width: '10%', textAlign: 'right' }}>{element.totalPrecio}</td>
-			<td style={{ width: '5%', textAlign: 'right' }}>{element.inventario}</td>
+			<td style={{ width: '10%', textAlign: 'right' }}>$ {numberFormat(element.totalPrecio)}</td>
+			<td style={{ width: '5%', textAlign: 'right' }}>{numberFormat(element.inventario)}</td>
 
 		</tr>
 	))
@@ -118,10 +122,6 @@ const index = ({ data, options, anioSemana, optionsProducts, optionsTypeStore })
 				})
 			}
 		}
-	}
-
-	const numberFormat = (number) => {
-		return new Intl.NumberFormat('es-MX').format(number)
 	}
 
 	return (
@@ -219,7 +219,7 @@ const index = ({ data, options, anioSemana, optionsProducts, optionsTypeStore })
 
 						<div className="start-1 size-24 padding-v-20 ">
 							<div className='bg-white padding-h-30 padding-v-30'>
-								<table>
+								<table className="big-table">
 									<tbody>
 										{tableHeaders}
 										{getRows(pages, getIndex)}

@@ -105,7 +105,7 @@ const index = ({ data }) => {
 
 						<div className="start-1 size-24 padding-v-20 ">
 							<div className='bg-white padding-h-30 padding-v-30'>
-								<table>
+								<table className="big-table">
 									<tbody>
 										{tableHeaders}
 										{getRows(pages, getIndex)}

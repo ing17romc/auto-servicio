@@ -28,8 +28,8 @@ export const CONTENT = {
 		TABULAR: {
 			TITLE: 'Tabular'
 		},
-		LOG: {
-			TITLE: 'Log'
+		GRAFICAS: {
+			TITLE: 'Graficas'
 		}
 	},
 	GENERIC: {

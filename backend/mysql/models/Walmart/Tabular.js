@@ -16,7 +16,17 @@ ON wtb.codigoTienda = wt.id
 LEFT JOIN  autoservicios.Walmart_TiposTiendas wtt
 ON wt.idTipo = wtt.id WHERE anio = ? and semana = ? and (? = 0 or ? = wtb.codigoProducto) and (? = 0 or ? = wt.idTipo) ;`
 
-// const SP_TOTALES = 'SELECT sum(cantidadVendida) totalVentaCantidad, ROUND(sum(totalPrecio), 2) totalVentaPrecio, sum(inventario) totalInventario FROM autoservicios.Walmart_Tabular WHERE anio = ? and semana = ? ;'
+// const SP_TOTALES_ANIO_SEMANA = 'SELECT sum(cantidadVendida) totalVentaCantidad, ROUND(sum(totalPrecio), 2) totalVentaPrecio, sum(inventario) totalInventario FROM autoservicios.Walmart_Tabular WHERE anio = ? and semana = ? ;'
+
+const SP_TOTALES_ANIO_SEMANA = `SELECT 
+anio, 
+semana,
+sum(cantidadVendida) totalVentaCantidad, 
+ROUND(sum(totalPrecio), 2) totalVentaPrecio, 
+sum(inventario) totalInventario
+FROM autoservicios.Walmart_Tabular 
+GROUP BY anio, semana
+ORDER BY anio DESC, semana DESC;`
 
 const SP_ANIO_SEMANA = 'SELECT distinct anio, semana FROM autoservicios.Walmart_Tabular ORDER BY anio DESC, semana DESC;'
 
@@ -24,6 +34,18 @@ export const getAnioSemana = async () => {
 	try {
 		// const data = await excuteSP(SP);
 		const data = await excuteQuery({ query: SP_ANIO_SEMANA })
+		// console.log(data)
+		return data
+	} catch (error) {
+		console.log(error)
+		return []
+	}
+}
+
+export const getTotalesAnioSemana = async () => {
+	try {
+		// const data = await excuteSP(SP);
+		const data = await excuteQuery({ query: SP_TOTALES_ANIO_SEMANA })
 		// console.log(data)
 		return data
 	} catch (error) {
