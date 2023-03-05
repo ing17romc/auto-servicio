@@ -7,7 +7,7 @@ import {
 	useAuthUser
 } from 'next-firebase-auth'
 const { USUARIOS } = CONFIG.ROUTER
-const { EXIT_APP } = CONFIG.ROUTER
+const { EXIT_APP, START_APP } = CONFIG.ROUTER
 
 const Layout = ({ children }) => {
 	const router = useRouter()
@@ -30,9 +30,12 @@ const Layout = ({ children }) => {
 		return RIGHT_OPTIONS
 	}
 
+	console.log(router.asPath)
+
 	return <UI.LayoutV2
 		leftOptions={LEFT_OPTIONS}
 		sideOptions={MENU_OPTIONS}
+		showSideBar={router.asPath === START_APP}
 		rightOptions={getRightOptions()}
 		getCurrentPath={(path) => event(path)}
 	>

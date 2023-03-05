@@ -17,7 +17,7 @@ const tableHeaders = <tr>
 	<th style={{ width: '25%' }}>Producto</th>
 	<th style={{ width: '10%' }}>Nombre</th>
 	<th style={{ width: '25%' }}>Tienda</th>
-	<th style={{ width: '10%' }}>Tipo Tienda</th>
+	<th style={{ width: '10%' }}>Tipo de tienda</th>
 	<th style={{ width: '5%', textAlign: 'right' }}>Precio</th>
 	<th style={{ width: '5%', textAlign: 'right' }}>Costo</th>
 	<th style={{ width: '5%', textAlign: 'right' }}>VU</th>
@@ -164,7 +164,7 @@ const index = ({ data, options, anioSemana, optionsProducts, optionsTypeStore })
 								value={state.idTipoTienda}
 								options={optionsTypeStore}
 								eventChange={e => onInputChange(e)}
-								titleTop='Tipo tienda'
+								titleTop='Tipo de tienda'
 							/>
 						</div>
 

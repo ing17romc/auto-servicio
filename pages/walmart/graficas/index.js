@@ -13,10 +13,10 @@ import React, { useState } from 'react'
 const { GRAFICAS: API } = CONFIG.API.WALMART
 
 const tableHeaders = <tr>
-	<th style={{ width: '20%' }}>{'Año'}</th>
-	<th style={{ width: '20%' }}>{'Semana'}</th>
+	<th style={{ width: '10%' }}>{'Año'}</th>
+	<th style={{ width: '10%' }}>{'Semana'}</th>
 	<th style={{ width: '20%', textAlign: 'right' }}>{'Venta unidades'}</th>
-	<th style={{ width: '20%', textAlign: 'right' }}>{'Venta peso'}</th>
+	<th style={{ width: '30%', textAlign: 'right' }}>{'Venta peso'}</th>
 	<th style={{ width: '20%', textAlign: 'right' }}>{'Inventario'}</th>
 </tr>
 
@@ -27,10 +27,10 @@ const numberFormat = (number) => {
 const getRows = (dt) => {
 	return dt.map((element, i) => (
 		<tr key={i}>
-			<td style={{ width: '20%' }}>{element.anio}</td>
-			<td style={{ width: '20%' }}>{element.semana}</td>
+			<td style={{ width: '10%' }}>{element.anio}</td>
+			<td style={{ width: '10%' }}>{element.semana}</td>
 			<td style={{ width: '20%', textAlign: 'right' }}>{numberFormat(element.totalVentaCantidad)}</td>
-			<td style={{ width: '20%', textAlign: 'right' }}>$ {numberFormat(element.totalVentaPrecio)}</td>
+			<td style={{ width: '30%', textAlign: 'right' }}>$ {numberFormat(element.totalVentaPrecio)}</td>
 			<td style={{ width: '20%', textAlign: 'right' }}>{numberFormat(element.totalInventario)}</td>
 		</tr>
 	))
