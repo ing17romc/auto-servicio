@@ -9,6 +9,8 @@ import {
 } from 'next-firebase-auth'
 import { UI, functions } from 'edt-lib'
 import React, { useState } from 'react'
+import { numberFormat } from '../../../lib/utils'
+import Totales from '../components/Totales'
 
 const { TITLE } = CONTENT.WALMART.TABULAR
 const { TABULAR: API_TABULAR, PRODUCTOS: API_PRODUCTOS, TIPOS_TIENDAS: API_TIPOS_TIENDAS } = CONFIG.API.WALMART
@@ -26,10 +28,6 @@ const tableHeaders = <tr>
 	<th style={{ width: '5%', textAlign: 'right' }}>Inv.</th>
 
 </tr>
-
-const numberFormat = (number) => {
-	return new Intl.NumberFormat('es-MX').format(number)
-}
 
 const getRows = (pages, getIndex) => {
 	if (pages.length === 0) return <tr></tr>
@@ -81,12 +79,6 @@ const index = ({ data, options, anioSemana, optionsProducts, optionsTypeStore })
 	const onInputChange = async e => {
 		const object = getValueInput(e)
 
-		// console.log(object)
-
-		// console.log(state.anioSemana)
-		// console.log(state.idProducto)
-		// console.log(state.idTipoTienda)
-
 		if (object.key === 'anioSemana' || object.key === 'idProducto' || object.key === 'idTipoTienda') {
 			setLoading(true)
 			const values = (object.key === 'anioSemana') ? object.value.split('-') : state.anioSemana.split('-')
@@ -124,6 +116,18 @@ const index = ({ data, options, anioSemana, optionsProducts, optionsTypeStore })
 		}
 	}
 
+	const ventaUnidades = state.dt.resultados && state.dt.resultados.length > 0
+		? (state.dt.resultados.reduce((sum, value) => (typeof value.cantidadVendida === 'number' ? sum + value.cantidadVendida : sum), 0))
+		: 0
+
+	const ventaPesos = state.dt.resultados && state.dt.resultados.length > 0
+		? (state.dt.resultados.reduce((sum, value) => (typeof value.totalPrecio === 'number' ? sum + value.totalPrecio : sum), 0))
+		: 0
+
+	const inventario = state.dt.resultados && state.dt.resultados.length > 0
+		? (state.dt.resultados.reduce((sum, value) => (typeof value.inventario === 'number' ? sum + value.inventario : sum), 0))
+		: 0
+
 	return (
 		<Layout>
 			<UI.Spinner show={loading}/>
@@ -136,7 +140,7 @@ const index = ({ data, options, anioSemana, optionsProducts, optionsTypeStore })
 					<div className="start-1  padding-v-30" />
 					<div className="grid-secondary bg-light-gray elevated">
 						<div className="start-1 size-8 padding-v-30">
-							<h3> Listado... </h3>
+							<h3> Filtros... </h3>
 						</div>
 
 						<div className="start-1 size-4 padding-v-20">
@@ -184,30 +188,7 @@ const index = ({ data, options, anioSemana, optionsProducts, optionsTypeStore })
 							/>
 						</div>
 
-						<div className="start-14  size-3 padding-v-20">
-							<h5>Venta unidades</h5>
-							<h4 className=" padding-v-20">{
-								state.dt.resultados && state.dt.resultados.length > 0
-									? numberFormat(state.dt.resultados.reduce((sum, value) => (typeof value.cantidadVendida === 'number' ? sum + value.cantidadVendida : sum), 0))
-									: 0
-							}</h4>
-						</div>
-						<div className=" size-4 padding-v-20">
-							<h5>Venta pesos</h5>
-							<h4 className=" padding-v-20">$ {
-								state.dt.resultados && state.dt.resultados.length > 0
-									? numberFormat(state.dt.resultados.reduce((sum, value) => (typeof value.totalPrecio === 'number' ? sum + value.totalPrecio : sum), 0))
-									: 0
-							}</h4>
-						</div>
-						<div className=" size-3 padding-v-20">
-							<h5>Inventario</h5>
-							<h4 className=" padding-v-20">{
-								state.dt.resultados && state.dt.resultados.length > 0
-									? numberFormat(state.dt.resultados.reduce((sum, value) => (typeof value.inventario === 'number' ? sum + value.inventario : sum), 0))
-									: 0
-							}</h4>
-						</div>
+						<Totales ventaUnidades={ventaUnidades} ventaPesos={ventaPesos} inventario={inventario} />
 
 						<div className='start-1 size-24 padding-v-20 center'>
 							<UI.Pagination

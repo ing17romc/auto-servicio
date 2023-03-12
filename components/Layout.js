@@ -30,8 +30,6 @@ const Layout = ({ children }) => {
 		return RIGHT_OPTIONS
 	}
 
-	console.log(router.asPath)
-
 	return <UI.LayoutV2
 		leftOptions={LEFT_OPTIONS}
 		sideOptions={MENU_OPTIONS}

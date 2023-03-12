@@ -30,6 +30,9 @@ export const CONTENT = {
 		},
 		GRAFICAS: {
 			TITLE: 'Graficas'
+		},
+		LOGS: {
+			TITLE: 'Logs'
 		}
 	},
 	GENERIC: {
