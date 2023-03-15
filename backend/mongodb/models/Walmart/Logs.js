@@ -18,10 +18,10 @@ export const find = async () => {
 
 	return result
 }
-export const save = async ({ file, message, description }) => {
+export const save = async ({ file, type, message, description }) => {
 	await dbConnect()
 
-	const newData = new Log({ file, message, description })
+	const newData = new Log({ file, type, message, description })
 
 	return await newData.save()
 }
@@ -33,10 +33,10 @@ export const findById = async (id) => {
 	return result
 }
 
-export const update = async ({ id, file, message, description }) => {
+export const update = async ({ id, file, type, message, description }) => {
 	await dbConnect()
 
-	return await Log.updateOne({ _id: id }, { file, message, description }, {
+	return await Log.updateOne({ _id: id }, { file, type, message, description }, {
 		new: true,
 		runValidators: true
 	})
@@ -45,4 +45,10 @@ export const deleteById = async (id) => {
 	await dbConnect()
 
 	return await Log.deleteOne({ _id: id })
+}
+
+export const deleteAll = async (file) => {
+	await dbConnect()
+
+	return await Log.deleteMany({})
 }
