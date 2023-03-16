@@ -31,8 +31,8 @@ export const CONTENT = {
 		GRAFICAS: {
 			TITLE: 'Graficas'
 		},
-		LOGS: {
-			TITLE: 'Logs'
+		REGISTROS_ERRORES: {
+			TITLE: 'Registros de errores'
 		}
 	},
 	GENERIC: {
