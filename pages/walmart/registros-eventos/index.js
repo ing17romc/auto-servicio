@@ -19,16 +19,7 @@ const tableHeaders = <tr>
 	<th style={{ width: '45%' }}>message</th>
 </tr>
 
-const getRows = (pages, getIndex) => {
-	if (pages.length === 0) return <tr></tr>
-	return pages[getIndex].map((element, i) => (
-		<tr key={i}>
-			<td style={{ width: '10%' }}>{element.type}</td>
-			<td style={{ width: '45%' }}>{element.file}</td>
-			<td style={{ width: '45%' }}>{element.message}</td>
-		</tr>
-	))
-}
+
 
 const index = ({ data, options }) => {
 	const { Title } = UI
@@ -40,6 +31,7 @@ const index = ({ data, options }) => {
 		dt: data,
 		file: ''
 	})
+	// const [modal, setModal] = useState(false)
 
 	const getSlides = (acc, cur, slidesPerView) => {
 		if (!Array.isArray(acc) || !Array.isArray(cur) || !slidesPerView) { return [] }
@@ -78,6 +70,26 @@ const index = ({ data, options }) => {
 		}
 	}
 
+	const showModal = (element) => {
+		console.log(element)
+		alert(element._id)
+	}
+
+	const getRows = (pages, getIndex) => {
+		if (pages.length === 0) return <tr></tr>
+		return pages[getIndex].map((element, i) => (
+			<tr key={i}
+				className='active'
+				onClick={() =>
+					showModal(element)
+				}>
+				<td style={{ width: '10%' }}>{element.type}</td>
+				<td style={{ width: '45%' }}>{element.file}</td>
+				<td style={{ width: '45%' }}>{element.message}</td>
+			</tr>
+		))
+	}
+
 	return (
 		<Layout>
 			<div className="container-body">
@@ -92,7 +104,7 @@ const index = ({ data, options }) => {
 							<h3> Filtros... </h3>
 						</div>
 
-						<div className="start-1  size-14 padding-v-20">
+						<div className="start-1 size-18 padding-v-20">
 							<UI.Selector
 								id='file'
 								value={state.file}
@@ -150,6 +162,14 @@ const index = ({ data, options }) => {
 					<div className="start-1 padding-v-20" />
 				</div>
 			</div>
+			{/*
+
+				<UI.Modal show={modal} eventModal={() => setModal(!modal)}>
+					<div className='padding-v-40 padding-h-40'>
+						<h1>Example Modal!</h1>
+					</div>
+				</UI.Modal>
+							*/}
 		</Layout>
 	)
 }
