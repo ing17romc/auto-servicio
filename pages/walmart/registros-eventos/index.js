@@ -8,18 +8,46 @@ import {
 	withAuthUserTokenSSR
 } from 'next-firebase-auth'
 import { UI, functions } from 'edt-lib'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const { TITLE } = CONTENT.WALMART.REGISTROS_ERRORES
 const { REGISTROS_ERRORES: API_LOGS } = CONFIG.API.WALMART
 
 const tableHeaders = <tr>
-	<th style={{ width: '10%' }}>type</th>
-	<th style={{ width: '45%' }}>file</th>
-	<th style={{ width: '45%' }}>message</th>
+	<th style={{ width: '10%' }}>Tipo</th>
+	<th style={{ width: '45%' }}>Archivo</th>
+	<th style={{ width: '45%' }}>Mensaje</th>
 </tr>
 
+const Modal = ({ show, eventModal, children }) => {
+	const [state, setState] = useState(show)
 
+	const closeModal = e => {
+		eventModal(e)
+	}
+
+	useEffect(() => {
+		setState(show)
+	}, [show])
+
+	const modalRender = () => (
+		<div className='modal'>
+			<div className='modal-content'>
+				<div className='modal-container'>
+					<div className='padding-v-20 padding-h-20 '>
+						<h4 className='modal-close-button' onClick={closeModal}>
+							X
+						</h4>
+					</div>
+				</div>
+
+				<div className='modal-body '>{children}</div>
+			</div>
+		</div>
+	)
+
+	return !state ? null : modalRender()
+}
 
 const index = ({ data, options }) => {
 	const { Title } = UI
@@ -29,9 +57,10 @@ const index = ({ data, options }) => {
 		page: 1,
 		pages: 500,
 		dt: data,
-		file: ''
+		file: '',
+		element: {}
 	})
-	// const [modal, setModal] = useState(false)
+	const [modal, setModal] = useState(false)
 
 	const getSlides = (acc, cur, slidesPerView) => {
 		if (!Array.isArray(acc) || !Array.isArray(cur) || !slidesPerView) { return [] }
@@ -52,12 +81,18 @@ const index = ({ data, options }) => {
 
 		const arr = []
 		if (object.key === 'file') {
-			data.forEach(element => {
-				if (element.file === object.value) {
-					arr.push(element
-					)
-				}
-			})
+			if (object.value !== '') {
+				data.forEach(element => {
+					if (element.file === object.value) {
+						arr.push(element
+						)
+					}
+				})
+			} else 				{
+				data.forEach(element => {
+					arr.push(element)
+				})
+			}
 		}
 
 		if (e) {
@@ -72,7 +107,12 @@ const index = ({ data, options }) => {
 
 	const showModal = (element) => {
 		console.log(element)
-		alert(element._id)
+		// alert(element._id)
+		setstate({
+			...state,
+			element
+		})
+		setModal(true)
 	}
 
 	const getRows = (pages, getIndex) => {
@@ -110,7 +150,7 @@ const index = ({ data, options }) => {
 								value={state.file}
 								options={options}
 								eventChange={e => onInputChange(e)}
-								titleTop='Producto'
+								titleTop='Archivos'
 							/>
 						</div>
 
@@ -162,14 +202,19 @@ const index = ({ data, options }) => {
 					<div className="start-1 padding-v-20" />
 				</div>
 			</div>
-			{/*
-
-				<UI.Modal show={modal} eventModal={() => setModal(!modal)}>
-					<div className='padding-v-40 padding-h-40'>
-						<h1>Example Modal!</h1>
+			<Modal show={modal} eventModal={() => setModal(!modal)}>
+				<div className='padding-v-20 padding-h-40'>
+					<UI.Title label='Detalles' secondary={true}/>
+					<div className='padding-v-20'>
+						<h5 className='padding-v-10'>ID: {state.element._id}</h5>
+						<h5 className='padding-v-10'>Tipo: {state.element.type}</h5>
+						<h5 className='padding-v-10'>Archivo: {state.element.file}</h5>
+						<h5 className='padding-v-10'>Mensaje: {state.element.message}</h5>
+						<h5 className='padding-v-10'>Descripción: {state.element.description}</h5>
 					</div>
-				</UI.Modal>
-							*/}
+				</div>
+			</Modal>
+
 		</Layout>
 	)
 }
@@ -184,7 +229,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
 
 		console.log('REGISTROS_ERRORES', responseJSON.result)
 
-		const options = []
+		const options = [{ key: '', value: 'Seleccionar' }]
 
 		for (const iterator of responseJSON.result) {
 			if (!options.some(value => value.key === iterator.file.toString())) {
