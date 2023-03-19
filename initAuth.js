@@ -27,12 +27,12 @@ const initAuth = () => {
 		// useFirebaseAdminDefaultCredential: true,
 		firebaseClientInitConfig: {
 			databaseURL: '',
-			apiKey: "AIzaSyC2HXtX3YqBWwOEv_IQH6zkUl9tAtJN-q8",
-			authDomain: "auto-servicios-cero-humedad.firebaseapp.com",
-			projectId: "auto-servicios-cero-humedad",
-			storageBucket: "auto-servicios-cero-humedad.appspot.com",
-			messagingSenderId: "67232752853",
-			appId: "1:67232752853:web:d281e197fdc5070956ee5c"
+			apiKey: 'AIzaSyC2HXtX3YqBWwOEv_IQH6zkUl9tAtJN-q8',
+			authDomain: 'auto-servicios-cero-humedad.firebaseapp.com',
+			projectId: 'auto-servicios-cero-humedad',
+			storageBucket: 'auto-servicios-cero-humedad.appspot.com',
+			messagingSenderId: '67232752853',
+			appId: '1:67232752853:web:d281e197fdc5070956ee5c'
 		},
 		cookies: {
 			name: 'auto-servicios-cero-humedad-cookies-app', // required

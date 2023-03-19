@@ -4,6 +4,7 @@ import dbConnect from '../../'
 /* PetSchema will correspond to a collection in your MongoDB database. */
 const LogSchema = new mongoose.Schema({
 	file: String,
+	sheet: String,
 	type: String,
 	message: String,
 	description: String
@@ -18,10 +19,10 @@ export const find = async () => {
 
 	return result
 }
-export const save = async ({ file, type, message, description }) => {
+export const save = async ({ file, sheet, type, message, description }) => {
 	await dbConnect()
 
-	const newData = new Log({ file, type, message, description })
+	const newData = new Log({ file, sheet, type, message, description })
 
 	return await newData.save()
 }
@@ -33,10 +34,10 @@ export const findById = async (id) => {
 	return result
 }
 
-export const update = async ({ id, file, type, message, description }) => {
+export const update = async ({ id, file, sheet, type, message, description }) => {
 	await dbConnect()
 
-	return await Log.updateOne({ _id: id }, { file, type, message, description }, {
+	return await Log.updateOne({ _id: id }, { file, sheet, type, message, description }, {
 		new: true,
 		runValidators: true
 	})

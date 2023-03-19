@@ -16,8 +16,8 @@ const { PRODUCTOS: PATH, BASE } = CONFIG.ROUTER.WALMART
 
 const tableHeaders =								<tr>
 	<th style={{ width: '10%' }}>{CONTENT.GENERIC.ID}</th>
-	<th style={{ width: '60%' }}>{CONTENT.GENERIC.NAME}</th>
-	<th style={{ width: '10%' }}>{CONTENT.GENERIC.NAME}</th>
+	<th style={{ width: '30%' }}>{CONTENT.GENERIC.NAME}</th>
+	<th style={{ width: '30%' }}>{CONTENT.GENERIC.NAME}</th>
 	<th style={{ width: '10%' }}>{CONTENT.GENERIC.STATUS.NAME}</th>
 	<th style={{ width: '10%' }}></th>
 	<th style={{ width: '10%' }}></th>
@@ -27,8 +27,8 @@ const getRows = (dt) => {
 	return dt.map((element, i) => (
 		<tr key={i}>
 			<td style={{ width: '10%' }}>{element.id}</td>
-			<td style={{ width: '60%' }}>{element.nombre}</td>
-			<td style={{ width: '60%' }}>{element.nombre_original}</td>
+			<td style={{ width: '30%' }}>{element.nombre}</td>
+			<td style={{ width: '30%' }}>{element.nombre_original}</td>
 			<ColumnStatus width='10%' estado={element.estado} path={BASE + PATH}/>
 			<ColumnEdit width='10%' id={element.id} path={BASE + PATH}/>
 			<ColumnRemove width='10%' id={element.id} api={API} path={BASE + PATH}/>

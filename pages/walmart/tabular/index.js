@@ -16,9 +16,9 @@ const { TITLE } = CONTENT.WALMART.TABULAR
 const { TABULAR: API_TABULAR, PRODUCTOS: API_PRODUCTOS, TIPOS_TIENDAS: API_TIPOS_TIENDAS } = CONFIG.API.WALMART
 
 const tableHeaders = <tr>
-	<th style={{ width: '25%' }}>Producto</th>
+	<th style={{ width: '20%' }}>Producto</th>
 	<th style={{ width: '10%' }}>Nombre</th>
-	<th style={{ width: '25%' }}>Tienda</th>
+	<th style={{ width: '20%' }}>Tienda</th>
 	<th style={{ width: '10%' }}>Tipo de tienda</th>
 	<th style={{ width: '5%', textAlign: 'right' }}>Precio</th>
 	<th style={{ width: '5%', textAlign: 'right' }}>Costo</th>
@@ -26,6 +26,7 @@ const tableHeaders = <tr>
 
 	<th style={{ width: '10%', textAlign: 'right' }}>VP</th>
 	<th style={{ width: '5%', textAlign: 'right' }}>Inv.</th>
+	<th style={{ width: '10%' }}>Archivo</th>
 
 </tr>
 
@@ -33,9 +34,9 @@ const getRows = (pages, getIndex) => {
 	if (pages.length === 0) return <tr></tr>
 	return pages[getIndex].map((element, i) => (
 		<tr key={i}>
-			<td style={{ width: '25%' }}>{`${element.codigoProducto} - ${element.wp_nombre}`}</td>
+			<td style={{ width: '20%' }}>{`${element.codigoProducto} - ${element.wp_nombre}`}</td>
 			<td style={{ width: '10%' }}>{element.chp_nombre}</td>
-			<td style={{ width: '25%' }}>{`${element.codigoTienda} ${element.wt_nombre}`}</td>
+			<td style={{ width: '20%' }}>{`${element.codigoTienda} ${element.wt_nombre}`}</td>
 			<td style={{ width: '10%' }}>{element.wtt_nombre}</td>
 			<td style={{ width: '5%', textAlign: 'right' }}>$ {numberFormat(element.precioVentaUnidad)}</td>
 			<td style={{ width: '5%', textAlign: 'right' }}>$ {numberFormat(element.costoUnidad)}</td>
@@ -43,6 +44,8 @@ const getRows = (pages, getIndex) => {
 
 			<td style={{ width: '10%', textAlign: 'right' }}>$ {numberFormat(element.totalPrecio)}</td>
 			<td style={{ width: '5%', textAlign: 'right' }}>{numberFormat(element.inventario)}</td>
+
+			<td style={{ width: '10%' }}>{element.archivo}</td>
 
 		</tr>
 	))

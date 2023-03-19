@@ -15,8 +15,9 @@ const { REGISTROS_ERRORES: API_LOGS } = CONFIG.API.WALMART
 
 const tableHeaders = <tr>
 	<th style={{ width: '10%' }}>Tipo</th>
-	<th style={{ width: '45%' }}>Archivo</th>
-	<th style={{ width: '45%' }}>Mensaje</th>
+	<th style={{ width: '40%' }}>Archivo</th>
+	<th style={{ width: '10%' }}>Hoja</th>
+	<th style={{ width: '40%' }}>Mensaje</th>
 </tr>
 
 const Modal = ({ show, eventModal, children }) => {
@@ -124,8 +125,9 @@ const index = ({ data, options }) => {
 					showModal(element)
 				}>
 				<td style={{ width: '10%' }}>{element.type}</td>
-				<td style={{ width: '45%' }}>{element.file}</td>
-				<td style={{ width: '45%' }}>{element.message}</td>
+				<td style={{ width: '40%' }}>{element.file}</td>
+				<td style={{ width: '10%' }}>{element.sheet}</td>
+				<td style={{ width: '40%' }}>{element.message}</td>
 			</tr>
 		))
 	}
@@ -203,12 +205,13 @@ const index = ({ data, options }) => {
 				</div>
 			</div>
 			<Modal show={modal} eventModal={() => setModal(!modal)}>
-				<div className='padding-v-20 padding-h-40'>
+				<div className='padding-v-20 padding-h-80'>
 					<UI.Title label='Detalles' secondary={true}/>
-					<div className='padding-v-20'>
+					<div className='padding-v-60'>
 						<h5 className='padding-v-10'>ID: {state.element._id}</h5>
 						<h5 className='padding-v-10'>Tipo: {state.element.type}</h5>
 						<h5 className='padding-v-10'>Archivo: {state.element.file}</h5>
+						<h5 className='padding-v-10'>Hoja: {state.element.sheet}</h5>
 						<h5 className='padding-v-10'>Mensaje: {state.element.message}</h5>
 						<h5 className='padding-v-10'>Descripción: {state.element.description}</h5>
 					</div>

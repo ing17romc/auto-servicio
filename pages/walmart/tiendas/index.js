@@ -15,10 +15,11 @@ const { TIENDAS: API } = CONFIG.API.WALMART
 
 const tableHeaders =								<tr>
 	<th style={{ width: '5%' }}>Código</th>
-	<th style={{ width: '35%' }}>{CONTENT.GENERIC.NAME}</th>
+	<th style={{ width: '30%' }}>{CONTENT.GENERIC.NAME}</th>
 	<th style={{ width: '20%' }}>Tipo tienda</th>
 	<th style={{ width: '5%' }}>CP</th>
-	<th style={{ width: '35%' }}>Localidad</th>
+	<th style={{ width: '30%' }}>Localidad</th>
+	<th style={{ width: '10%' }}>Archivo</th>
 </tr>
 
 const getRows = (pages, getIndex) => {
@@ -26,10 +27,11 @@ const getRows = (pages, getIndex) => {
 	return pages[getIndex].map((element, i) => (
 		<tr key={i}>
 			<td style={{ width: '5%' }}>{element.id}</td>
-			<td style={{ width: '35%' }}>{element.nombre}</td>
+			<td style={{ width: '30%' }}>{element.nombre}</td>
 			<td style={{ width: '20%' }}>{element.tipoTienda}</td>
 			<td style={{ width: '5%' }}>{element.codigoPostal}</td>
-			<td style={{ width: '35%' }}>{element.localidad}</td>
+			<td style={{ width: '30%' }}>{element.localidad}</td>
+			<td style={{ width: '10%' }}>{element.archivo}</td>
 		</tr>
 	))
 }
