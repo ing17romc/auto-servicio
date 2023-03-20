@@ -16,7 +16,8 @@ const { REGISTROS_ERRORES: API_LOGS } = CONFIG.API.WALMART
 const tableHeaders = <tr>
 	<th style={{ width: '10%' }}>Tipo</th>
 	<th style={{ width: '40%' }}>Archivo</th>
-	<th style={{ width: '10%' }}>Hoja</th>
+	<th style={{ width: '5%' }}>Hoja</th>
+	<th style={{ width: '5%' }}>Registrado</th>
 	<th style={{ width: '40%' }}>Mensaje</th>
 </tr>
 
@@ -126,7 +127,8 @@ const index = ({ data, options }) => {
 				}>
 				<td style={{ width: '10%' }}>{element.type}</td>
 				<td style={{ width: '40%' }}>{element.file}</td>
-				<td style={{ width: '10%' }}>{element.sheet}</td>
+				<td style={{ width: '5%' }}>{element.sheet}</td>
+				<td style={{ width: '5%' }}>{element.createdAt}</td>
 				<td style={{ width: '40%' }}>{element.message}</td>
 			</tr>
 		))
@@ -212,6 +214,8 @@ const index = ({ data, options }) => {
 						<h5 className='padding-v-10'>Tipo: {state.element.type}</h5>
 						<h5 className='padding-v-10'>Archivo: {state.element.file}</h5>
 						<h5 className='padding-v-10'>Hoja: {state.element.sheet}</h5>
+						<h5 className='padding-v-10'>Registrado: {state.element.createdAt}</h5>
+						<h5 className='padding-v-10'>Actualizado: {state.element.updatedAt}</h5>
 						<h5 className='padding-v-10'>Mensaje: {state.element.message}</h5>
 						<h5 className='padding-v-10'>Descripción: {state.element.description}</h5>
 					</div>
