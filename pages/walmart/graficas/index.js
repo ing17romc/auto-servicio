@@ -119,18 +119,19 @@ const index = ({ data = [] }) => {
 						titleTop='Año'
 					/>
 				</div>
-				<div className="start-1 size-12 padding-v-20 center">
+				<div className="start-1 size-6 padding-v-20 center">
 					<Graficas chartsTitle={'Venta en pesos'} dataSetTitle={state.anio} data={newData.map(x => x.totalVentaPrecio)} labels={newData.map(x => x.semana)}/>
 				</div>
-				<div className="start-1 size-12 padding-v-20 center">
+				<div className=" size-6 padding-v-20 center">
 					<Graficas chartsTitle={'Venta en unidades'} dataSetTitle={state.anio} data={newData.map(x => x.totalVentaCantidad)} labels={newData.map(x => x.semana)}/>
 				</div>
-				<div className="start-1 size-12 padding-v-20 center">
+				<div className="start-1 size-6 padding-v-20 center">
 					<Graficas chartsTitle={'Inventario'} dataSetTitle={state.anio} data={newData.map(x => x.totalInventario)} labels={newData.map(x => x.semana)}/>
 				</div>
-
-				<div className="grid-secondary">
-					<Totales ventaUnidades={ventaUnidades} ventaPesos={ventaPesos} inventario={inventario} />
+				<div className=" size-6 padding-v-20 center">
+					<div className="grid-secondary">
+						<Totales ventaUnidades={ventaUnidades} ventaPesos={ventaPesos} inventario={inventario} />
+					</div>
 				</div>
 
 				<div className="start-1 size-12 padding-v-20 ">
