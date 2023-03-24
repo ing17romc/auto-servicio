@@ -8,6 +8,7 @@ import {
 	withAuthUserTokenSSR
 } from 'next-firebase-auth'
 import { UI, functions } from 'edt-lib'
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { numberFormat } from '../../../lib/utils'
 import Totales from '../components/Totales'
@@ -62,6 +63,8 @@ const getFirtsData = (data) => {
 
 const index = ({ data = [] }) => {
 	const { getValueInput } = functions
+	const router = useRouter()
+	const { BASE: RETURN_PATH } = CONFIG.ROUTER.WALMART
 
 	const getAnios = (data) => {
 		const arr = []
@@ -109,43 +112,62 @@ const index = ({ data = [] }) => {
 
 	return (
 		<Layout>
-			<div className="grid-primary ">
-				<div className="start-1 size-6 padding-v-20">
-					<UI.Selector
-						id='anio'
-						value={state.anio}
-						options={getAnios(data)}
-						eventChange={e => onInputChange(e)}
-						titleTop='Año'
-					/>
-				</div>
-				<div className="start-1 size-6 padding-v-20 center">
-					<Graficas chartsTitle={'Venta en pesos'} dataSetTitle={state.anio} data={newData.map(x => x.totalVentaPrecio)} labels={newData.map(x => x.semana)}/>
-				</div>
-				<div className=" size-6 padding-v-20 center">
-					<Graficas chartsTitle={'Venta en unidades'} dataSetTitle={state.anio} data={newData.map(x => x.totalVentaCantidad)} labels={newData.map(x => x.semana)}/>
-				</div>
-				<div className="start-1 size-6 padding-v-20 center">
-					<Graficas chartsTitle={'Inventario'} dataSetTitle={state.anio} data={newData.map(x => x.totalInventario)} labels={newData.map(x => x.semana)}/>
-				</div>
-				<div className=" size-6 padding-v-20 center">
-					<div className="grid-secondary">
-						<Totales ventaUnidades={ventaUnidades} ventaPesos={ventaPesos} inventario={inventario} />
-					</div>
-				</div>
+			<div className="container-body">
+				<div className="grid-primary ">
 
-				<div className="start-1 size-12 padding-v-20 ">
-					<div className='bg-white padding-h-90 padding-v-30'>
-						<table>
-							<tbody>
-								{tableHeaders}
-								{getRows(newData)}
-							</tbody>
-						</table>
+					<div className="start-1 size-10 padding-v-20">
+						<h3> Filtros... </h3>
 					</div>
-				</div>
 
-				<div className="padding-v-20"></div>
+					<div className="start-12 size-1 padding-v-20">
+						<UI.ImageButton
+							id="clear"
+							icon="clear"
+							text="cerrar"
+							size="sm"
+							onClick={() => router.push(RETURN_PATH)}
+						/>
+					</div>
+
+					<div className="start-1 size-6 padding-v-20">
+
+						<UI.Selector
+							id='anio'
+							value={state.anio}
+							options={getAnios(data)}
+							eventChange={e => onInputChange(e)}
+							titleTop='Año'
+						/>
+					</div>
+
+					<div className="start-1 size-6 padding-v-20 center">
+						<Graficas chartsTitle={'Venta en pesos'} dataSetTitle={state.anio} data={newData.map(x => x.totalVentaPrecio)} labels={newData.map(x => x.semana)}/>
+					</div>
+					<div className=" size-6 padding-v-20 center">
+						<Graficas chartsTitle={'Venta en unidades'} dataSetTitle={state.anio} data={newData.map(x => x.totalVentaCantidad)} labels={newData.map(x => x.semana)}/>
+					</div>
+					<div className="start-1 size-6 padding-v-20 center">
+						<Graficas chartsTitle={'Inventario'} dataSetTitle={state.anio} data={newData.map(x => x.totalInventario)} labels={newData.map(x => x.semana)}/>
+					</div>
+					<div className=" size-6 padding-v-20 center">
+						<div className="grid-secondary">
+							<Totales ventaUnidades={ventaUnidades} ventaPesos={ventaPesos} inventario={inventario} isVertical={true} />
+						</div>
+					</div>
+
+					<div className="start-1 size-12 padding-v-20 ">
+						<div className='bg-white padding-h-90 padding-v-30'>
+							<table>
+								<tbody>
+									{tableHeaders}
+									{getRows(newData)}
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+					<div className="padding-v-20"></div>
+				</div>
 			</div>
 		</Layout>
 	)

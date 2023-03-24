@@ -39,6 +39,7 @@ const index = ({ data }) => (
 		<GenericList
 			title={TITLE}
 			path={BASE + PATH}
+			returnPath={BASE}
 		>
 			{tableHeaders}
 			{getRows(data)}

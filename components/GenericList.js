@@ -4,7 +4,7 @@ import { CONFIG } from 'config'
 
 const { CREAR } = CONFIG.ROUTER
 
-const GenericList = ({ title, children, path }) => {
+const GenericList = ({ title, children, path, returnPath }) => {
 	const router = useRouter()
 	const { Title, ImageButton } = UI
 
@@ -21,7 +21,17 @@ const GenericList = ({ title, children, path }) => {
 						<h3> Listado... </h3>
 					</div>
 
-					<div className="start-24 size-1 padding-v-20">
+					<div className="start-23 size-1 padding-v-20">
+						<ImageButton
+							id="keyboard_return"
+							icon="keyboard_return"
+							text="retornar"
+							size="sm"
+							onClick={() => router.push(returnPath)}
+						/>
+					</div>
+
+					<div className=" size-1 padding-v-20">
 						<ImageButton
 							id="add"
 							icon="add"

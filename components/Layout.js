@@ -24,7 +24,7 @@ const Layout = ({ children }) => {
 
 	const getRightOptions = () => {
 		if (AuthUser.email) {
-			const element = { path: USUARIOS.USER, name: AuthUser.email }
+			const element = { path: USUARIOS.USER, name: AuthUser.email, icon: 'person' }
 			if (!RIGHT_OPTIONS.find(element => element.name === AuthUser.email)) { RIGHT_OPTIONS.push(element) }
 		}
 		return RIGHT_OPTIONS

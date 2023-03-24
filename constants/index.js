@@ -9,12 +9,12 @@ export const STATUS = [
 	{ key: '1', value: GENERIC.STATUS.ACTIVE }
 ]
 
-export const LEFT_OPTIONS = [{ path: START_APP, name: 'Menu' }]
-export const RIGHT_OPTIONS = [{ path: EXIT_APP, name: 'Logout' }]
+export const LEFT_OPTIONS = [{ path: START_APP, name: 'Menu', icon: 'menu' }]
+export const RIGHT_OPTIONS = [{ path: EXIT_APP, name: 'Logout', icon: 'logout' }]
 
 export const MENU_OPTIONS = [
-	{ path: CERO_HUMEDAD.BASE, name: CONTENT.CERO_HUMEDAD.TITLE, icon: 'list' },
-	{ path: WALMART.BASE, name: CONTENT.WALMART.TITLE, icon: 'list' }
+	{ path: CERO_HUMEDAD.BASE, name: CONTENT.CERO_HUMEDAD.TITLE, icon: 'chevron_right' },
+	{ path: WALMART.BASE, name: CONTENT.WALMART.TITLE, icon: 'chevron_right' }
 ]
 
 export const MENU_CERO_HUMEDAD = [

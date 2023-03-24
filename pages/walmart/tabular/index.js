@@ -8,6 +8,7 @@ import {
 	withAuthUserTokenSSR
 } from 'next-firebase-auth'
 import { UI, functions } from 'edt-lib'
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { numberFormat } from '../../../lib/utils'
 import Totales from '../components/Totales'
@@ -52,7 +53,9 @@ const getRows = (pages, getIndex) => {
 }
 
 const index = ({ data, options, anioSemana, optionsProducts, optionsTypeStore }) => {
+	const router = useRouter()
 	const { Title } = UI
+	const { BASE: RETURN_PATH } = CONFIG.ROUTER.WALMART
 
 	const { getValueInput } = functions
 	const [state, setstate] = useState({
@@ -146,6 +149,16 @@ const index = ({ data, options, anioSemana, optionsProducts, optionsTypeStore })
 							<h3> Filtros... </h3>
 						</div>
 
+						<div className="start-24 size-1 padding-v-20">
+							<UI.ImageButton
+								id="keyboard_return"
+								icon="keyboard_return"
+								text="retornar"
+								size="sm"
+								onClick={() => router.push(RETURN_PATH)}
+							/>
+						</div>
+
 						<div className="start-1 size-4 padding-v-20">
 							<UI.Selector
 								id='anioSemana'
@@ -191,7 +204,7 @@ const index = ({ data, options, anioSemana, optionsProducts, optionsTypeStore })
 							/>
 						</div>
 
-						<Totales ventaUnidades={ventaUnidades} ventaPesos={ventaPesos} inventario={inventario} />
+						<Totales ventaUnidades={ventaUnidades} ventaPesos={ventaPesos} inventario={inventario} isVertical={false} />
 
 						<div className='start-1 size-24 padding-v-20 center'>
 							<UI.Pagination

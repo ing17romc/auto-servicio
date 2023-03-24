@@ -8,6 +8,7 @@ import {
 	withAuthUserTokenSSR
 } from 'next-firebase-auth'
 import { UI, functions } from 'edt-lib'
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 
 const { TITLE } = CONTENT.WALMART.TIENDAS
@@ -37,7 +38,9 @@ const getRows = (pages, getIndex) => {
 }
 
 const index = ({ data }) => {
+	const router = useRouter()
 	const { Title } = UI
+	const { BASE: RETURN_PATH } = CONFIG.ROUTER.WALMART
 
 	const { getValueInput } = functions
 	const [state, setstate] = useState({
@@ -81,6 +84,16 @@ const index = ({ data }) => {
 					<div className="grid-secondary bg-light-gray elevated">
 						<div className="start-1 size-10 padding-v-30">
 							<h3> Listado... </h3>
+						</div>
+
+						<div className="start-24 size-1 padding-v-20">
+							<UI.ImageButton
+								id="keyboard_return"
+								icon="keyboard_return"
+								text="retornar"
+								size="sm"
+								onClick={() => router.push(RETURN_PATH)}
+							/>
 						</div>
 
 						<div className="start-20 size-5 padding-v-20">
