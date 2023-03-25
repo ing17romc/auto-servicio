@@ -13,6 +13,7 @@ import React, { useEffect, useState } from 'react'
 import { getBreadcrumb } from '../../../lib/utils'
 
 const { TITLE } = CONTENT.WALMART.REGISTROS_ERRORES
+const { GENERIC } = CONTENT
 const { REGISTROS_ERRORES: API_LOGS } = CONFIG.API.WALMART
 
 const tableHeaders = <tr>
@@ -149,7 +150,7 @@ const index = ({ data, options }) => {
 					<div className="start-1  padding-v-30" />
 					<div className="grid-secondary bg-light-gray elevated">
 						<div className="start-1 size-8 padding-v-30">
-							<h3> Filtros... </h3>
+							<h3> {GENERIC.FILTROS} </h3>
 						</div>
 
 						<div className="start-24 size-1 padding-v-20">
@@ -184,7 +185,7 @@ const index = ({ data, options }) => {
 									{ key: '500', value: '500' }
 								]}
 								eventChange={e => onInputChange(e)}
-								titleTop='Registros por pagina'
+								titleTop={GENERIC.REGISTROS_POR_PAGINA}
 							/>
 						</div>
 
@@ -250,7 +251,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
 
 		console.log('REGISTROS_ERRORES', responseJSON.result)
 
-		const options = [{ key: '', value: 'Seleccionar' }]
+		const options = [{ key: '', value: GENERIC.SELECCIONAR }]
 
 		for (const iterator of responseJSON.result) {
 			if (!options.some(value => value.key === iterator.file.toString())) {

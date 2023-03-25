@@ -1,6 +1,7 @@
 
 import Layout from 'components/Layout'
 import { CONFIG } from 'config'
+import { CONTENT } from 'content'
 import Graficas from './graficas.js'
 import {
 	AuthAction,
@@ -14,6 +15,7 @@ import { numberFormat, getBreadcrumb } from '../../../lib/utils'
 import Totales from '../components/Totales'
 
 const { GRAFICAS: API } = CONFIG.API.WALMART
+const { GENERIC } = CONTENT
 
 const tableHeaders = <tr>
 	<th style={{ width: '10%', textAlign: 'right' }}>{'Año'}</th>
@@ -118,7 +120,7 @@ const index = ({ data = [] }) => {
 					<div className="grid-secondary">
 
 						<div className="start-1 size-10 padding-v-20">
-							<h3> Filtros... </h3>
+							<h3> {GENERIC.FILTROS} </h3>
 						</div>
 
 						<div className="start-24 size-1 padding-v-20">

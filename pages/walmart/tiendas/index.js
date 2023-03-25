@@ -13,6 +13,7 @@ import React, { useState } from 'react'
 import { getBreadcrumb } from '../../../lib/utils'
 
 const { TITLE } = CONTENT.WALMART.TIENDAS
+const { GENERIC } = CONTENT
 const { TIENDAS: API } = CONFIG.API.WALMART
 
 const tableHeaders =								<tr>
@@ -84,7 +85,7 @@ const index = ({ data }) => {
 					<div className="start-1  padding-v-30" />
 					<div className="grid-secondary bg-light-gray elevated">
 						<div className="start-1 size-10 padding-v-30">
-							<h3> Listado... </h3>
+							<h3> {GENERIC.LISTADO} </h3>
 						</div>
 
 						<div className="start-24 size-1 padding-v-20">
@@ -107,7 +108,7 @@ const index = ({ data }) => {
 									{ key: '300', value: '300' }
 								]}
 								eventChange={e => onInputChange(e)}
-								titleTop='Number item by page'
+								titleTop={GENERIC.REGISTROS_POR_PAGINA}
 							/>
 						</div>
 

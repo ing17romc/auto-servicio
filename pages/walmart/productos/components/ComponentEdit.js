@@ -3,6 +3,9 @@ import Form from 'components/Form'
 import Error from 'next/error'
 import { useState } from 'react'
 import { STATUS as ESTADOS } from '../../../../constants'
+import { CONTENT } from 'content'
+
+const { GENERIC } = CONTENT
 
 const ComponentEdit = ({ id = 0, newId = 0, nombre = '', estado = 1, idCeroHumedadProducto = 0, pathRetun, api, title, products = [], error }) => {
 	if (error && error.statusCode) { return <Error statusCode={error.statusCode} title={error.statusText} /> }
@@ -29,7 +32,7 @@ const ComponentEdit = ({ id = 0, newId = 0, nombre = '', estado = 1, idCeroHumed
 	}
 
 	const getProducts = () => {
-		const list = [{ key: '0', value: 'Seleccionar' }]
+		const list = [{ key: '0', value: GENERIC.SELECCIONAR }]
 		for (const product of products) {
 			list.push({ key: product.id.toString(), value: product.nombre })
 		}

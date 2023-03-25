@@ -1,8 +1,10 @@
 import { UI } from 'edt-lib'
 import { useRouter } from 'next/router'
 import { CONFIG } from 'config'
+import { CONTENT } from 'content'
 
 const { CREAR } = CONFIG.ROUTER
+const { GENERIC } = CONTENT
 
 const GenericList = ({ title, children, path, returnPath }) => {
 	const router = useRouter()
@@ -18,14 +20,14 @@ const GenericList = ({ title, children, path, returnPath }) => {
 				<div className="start-1  padding-v-30" />
 				<div className="grid-secondary bg-light-gray elevated">
 					<div className="start-1 size-10 padding-v-30">
-						<h3> Listado... </h3>
+						<h3> {GENERIC.LISTADO} </h3>
 					</div>
 
 					<div className="start-23 size-1 padding-v-20">
 						<ImageButton
 							id="keyboard_return"
 							icon="keyboard_return"
-							text="retornar"
+							text={GENERIC.RETORNAR}
 							size="sm"
 							onClick={() => router.push(returnPath)}
 						/>
@@ -35,7 +37,7 @@ const GenericList = ({ title, children, path, returnPath }) => {
 						<ImageButton
 							id="add"
 							icon="add"
-							text="agregar elemento"
+							text={GENERIC.AGREGAR_ELEMENTO}
 							size="sm"
 							onClick={() => router.push(`${path}${CREAR}`)}
 						/>

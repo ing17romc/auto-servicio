@@ -14,6 +14,7 @@ import { numberFormat, getBreadcrumb } from '../../../lib/utils'
 import Totales from '../components/Totales'
 
 const { TITLE } = CONTENT.WALMART.TABULAR
+const { GENERIC } = CONTENT
 const { TABULAR: API_TABULAR, PRODUCTOS: API_PRODUCTOS, TIPOS_TIENDAS: API_TIPOS_TIENDAS } = CONFIG.API.WALMART
 
 const tableHeaders = <tr>
@@ -146,7 +147,7 @@ const index = ({ data, options, anioSemana, optionsProducts, optionsTypeStore })
 					<div className="start-1  padding-v-30" />
 					<div className="grid-secondary bg-light-gray elevated">
 						<div className="start-1 size-8 padding-v-30">
-							<h3> Filtros... </h3>
+							<h3> {GENERIC.FILTROS} </h3>
 						</div>
 
 						<div className="start-24 size-1 padding-v-20">
@@ -200,7 +201,7 @@ const index = ({ data, options, anioSemana, optionsProducts, optionsTypeStore })
 									{ key: '500', value: '500' }
 								]}
 								eventChange={e => onInputChange(e)}
-								titleTop='Registros por pagina'
+								titleTop={GENERIC.REGISTROS_POR_PAGINA}
 							/>
 						</div>
 
@@ -259,8 +260,8 @@ export const getServerSideProps = withAuthUserTokenSSR({
 		const tipoTiendasJSON = await tipoTiendas.json()
 
 		const options = []
-		const optionsProducts = [{ key: '0', value: 'Selecionar' }]
-		const optionsTypeStore = [{ key: '0', value: 'Selecionar' }]
+		const optionsProducts = [{ key: '0', value: GENERIC.SELECCIONAR }]
+		const optionsTypeStore = [{ key: '0', value: GENERIC.SELECCIONAR }]
 
 		for (const iterator of productosJSON.result) {
 			optionsProducts.push({ key: `${iterator.id}`, value: `${iterator.id} - ${iterator.nombre} - ${iterator.nombre_original}` })

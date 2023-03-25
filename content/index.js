@@ -44,6 +44,15 @@ export const CONTENT = {
 		MENU: 'Menu',
 		EXIT: 'Salir',
 		ID: 'Id',
-		NAME: 'Nombre'
+		NAME: 'Nombre',
+		LISTADO: 'Listado...',
+		FILTROS: 'Filtros...',
+		SELECCIONAR: 'Seleccionar',
+		REGISTROS_POR_PAGINA: 'Registros por pagina',
+
+		RETORNAR: 'Retornar',
+		AGREGAR_ELEMENTO: 'Agregar elemento',
+		ELIMINAR: 'Eliminar',
+		EDITAR: 'Editar'
 	}
 }

@@ -2,6 +2,9 @@ import React from 'react'
 import { UI } from 'edt-lib'
 import { useRouter } from 'next/router'
 import { getStatus } from 'lib/utils'
+import { CONTENT } from 'content'
+
+const { GENERIC } = CONTENT
 
 export const ColumnStatus = ({ width, estado, path }) => {
 	return 	<td style={{ width }}>
@@ -36,7 +39,7 @@ export const ColumnRemove = ({ width, id, api, path }) => {
 		<UI.ImageButton
 			id="delete"
 			icon="delete"
-			text="eliminar"
+			text={GENERIC.ELIMINAR}
 			size="sm"
 			onClick={() => deleteElement()}
 		/>{' '}
@@ -51,7 +54,7 @@ export const ColumnEdit = ({ width, id, path }) => {
 		<UI.ImageButton
 			id="mode_edit"
 			icon="mode_edit"
-			text="editar"
+			text={GENERIC.EDITAR}
 			size="sm"
 			onClick={() => router.push(`${path}/${id}`)}
 		/>{' '}
