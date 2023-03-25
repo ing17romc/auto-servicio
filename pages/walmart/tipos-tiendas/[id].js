@@ -8,6 +8,8 @@ import {
 	withAuthUser,
 	withAuthUserTokenSSR
 } from 'next-firebase-auth'
+import { getBreadcrumb } from '../../../lib/utils'
+import { useRouter } from 'next/router'
 
 const { TITLE_EDIT } = CONTENT.WALMART.TIPOS_TIENDAS
 const { TIPOS_TIENDAS: API } = CONFIG.API.WALMART
@@ -17,9 +19,10 @@ const edit = ({ data, error }) => {
 	if (error && error.statusCode) { return <Error statusCode={error.statusCode} title={error.statusText} /> }
 
 	const { id, nombre, estado } = data
+	const router = useRouter()
 
 	return (
-		<Layout>
+		<Layout breadcrumbOptions={getBreadcrumb(router)}>
 			<GenericEdit
 				pathRetun={BASE + PATH}
 				api={API}

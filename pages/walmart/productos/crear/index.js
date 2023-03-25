@@ -7,6 +7,8 @@ import {
 	withAuthUser,
 	withAuthUserTokenSSR
 } from 'next-firebase-auth'
+import { getBreadcrumb } from '../../../../lib/utils'
+import { useRouter } from 'next/router'
 
 const { TITLE_NEW } = CONTENT.WALMART.PRODUCTOS
 const { PRODUCTOS: API } = CONFIG.API.WALMART
@@ -14,8 +16,10 @@ const { PRODUCTOS: API_PRODUCTOS } = CONFIG.API.CERO_HUMEDAD
 const { PRODUCTOS: PATH, BASE } = CONFIG.ROUTER.WALMART
 
 const index = ({ api, products }) => {
+	const router = useRouter()
+
 	return (
-		<Layout>
+		<Layout breadcrumbOptions={getBreadcrumb(router)}>
 			<ComponentEdit
 				pathRetun={BASE + PATH}
 				api={api}

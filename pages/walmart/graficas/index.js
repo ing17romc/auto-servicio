@@ -10,7 +10,7 @@ import {
 import { UI, functions } from 'edt-lib'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import { numberFormat } from '../../../lib/utils'
+import { numberFormat, getBreadcrumb } from '../../../lib/utils'
 import Totales from '../components/Totales'
 
 const { GRAFICAS: API } = CONFIG.API.WALMART
@@ -111,22 +111,25 @@ const index = ({ data = [] }) => {
 		: 0
 
 	return (
-		<Layout>
+		<Layout breadcrumbOptions={getBreadcrumb(router)}>
 			<div className="container-body">
 				<div className="grid-primary ">
 
-					<div className="start-1 size-10 padding-v-20">
-						<h3> Filtros... </h3>
-					</div>
+					<div className="grid-secondary">
 
-					<div className="start-12 size-1 padding-v-20">
-						<UI.ImageButton
-							id="clear"
-							icon="clear"
-							text="cerrar"
-							size="sm"
-							onClick={() => router.push(RETURN_PATH)}
-						/>
+						<div className="start-1 size-10 padding-v-20">
+							<h3> Filtros... </h3>
+						</div>
+
+						<div className="start-24 size-1 padding-v-20">
+							<UI.ImageButton
+								id="clear"
+								icon="clear"
+								text="cerrar"
+								size="sm"
+								onClick={() => router.push(RETURN_PATH)}
+							/>
+						</div>
 					</div>
 
 					<div className="start-1 size-6 padding-v-20">

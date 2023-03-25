@@ -10,7 +10,7 @@ import {
 import { UI, functions } from 'edt-lib'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import { numberFormat } from '../../../lib/utils'
+import { numberFormat, getBreadcrumb } from '../../../lib/utils'
 import Totales from '../components/Totales'
 
 const { TITLE } = CONTENT.WALMART.TABULAR
@@ -135,7 +135,7 @@ const index = ({ data, options, anioSemana, optionsProducts, optionsTypeStore })
 		: 0
 
 	return (
-		<Layout>
+		<Layout breadcrumbOptions={getBreadcrumb(router)}>
 			<UI.Spinner show={loading}/>
 			<div className="container-body">
 				<div className="grid-primary ">

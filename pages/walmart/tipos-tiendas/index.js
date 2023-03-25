@@ -9,6 +9,8 @@ import {
 	withAuthUser,
 	withAuthUserTokenSSR
 } from 'next-firebase-auth'
+import { getBreadcrumb } from '../../../lib/utils'
+import { useRouter } from 'next/router'
 
 const { TITLE } = CONTENT.WALMART.TIPOS_TIENDAS
 const { TIPOS_TIENDAS: API } = CONFIG.API.WALMART
@@ -34,22 +36,22 @@ const getRows = (dt) => {
 	))
 }
 
-const breadcrumbOptions = [
-	{ url: BASE, text: 'Walmart' }
-]
+const index = ({ data }) => {
+	const router = useRouter()
 
-const index = ({ data }) => (
-	<Layout breadcrumbOptions={breadcrumbOptions}>
-		<GenericList
-			title={TITLE}
-			path={BASE + PATH}
-			returnPath={BASE}
-		>
-			{tableHeaders}
-			{getRows(data)}
-		</GenericList>
-	</Layout>
-)
+	return (
+		<Layout breadcrumbOptions={getBreadcrumb(router)}>
+			<GenericList
+				title={TITLE}
+				path={BASE + PATH}
+				returnPath={BASE}
+			>
+				{tableHeaders}
+				{getRows(data)}
+			</GenericList>
+		</Layout>
+	)
+}
 
 export const getServerSideProps = withAuthUserTokenSSR({
 	whenUnauthed: AuthAction.REDIRECT_TO_LOGIN

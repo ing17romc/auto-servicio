@@ -9,6 +9,8 @@ import {
 	withAuthUser,
 	withAuthUserTokenSSR
 } from 'next-firebase-auth'
+import { getBreadcrumb } from '../../../lib/utils'
+import { useRouter } from 'next/router'
 
 const { TITLE } = CONTENT.CERO_HUMEDAD.PRODUCTOS
 const { PRODUCTOS: API } = CONFIG.API.CERO_HUMEDAD
@@ -34,18 +36,22 @@ const getRows = (dt) => {
 	))
 }
 
-const index = ({ data }) => (
-	<Layout>
-		<GenericList
-			title={TITLE}
-			path={BASE + PATH}
-			returnPath={BASE}
-		>
-			{tableHeaders}
-			{getRows(data)}
-		</GenericList>
-	</Layout>
-)
+const index = ({ data }) => {
+	const router = useRouter()
+
+	return (
+		<Layout breadcrumbOptions={getBreadcrumb(router)}>
+			<GenericList
+				title={TITLE}
+				path={BASE + PATH}
+				returnPath={BASE}
+			>
+				{tableHeaders}
+				{getRows(data)}
+			</GenericList>
+		</Layout>
+	)
+}
 
 export const getServerSideProps = withAuthUserTokenSSR({
 	whenUnauthed: AuthAction.REDIRECT_TO_LOGIN

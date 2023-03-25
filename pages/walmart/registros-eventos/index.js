@@ -10,6 +10,7 @@ import {
 import { UI, functions } from 'edt-lib'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import { getBreadcrumb } from '../../../lib/utils'
 
 const { TITLE } = CONTENT.WALMART.REGISTROS_ERRORES
 const { REGISTROS_ERRORES: API_LOGS } = CONFIG.API.WALMART
@@ -138,7 +139,7 @@ const index = ({ data, options }) => {
 	}
 
 	return (
-		<Layout>
+		<Layout breadcrumbOptions={getBreadcrumb(router)}>
 			<div className="container-body">
 				<div className="grid-primary ">
 					<div className="start-1 size-12 padding-v-20">
