@@ -34,8 +34,12 @@ const getRows = (dt) => {
 	))
 }
 
+const breadcrumbOptions = [
+	{ url: BASE, text: 'Walmart' }
+]
+
 const index = ({ data }) => (
-	<Layout>
+	<Layout breadcrumbOptions={breadcrumbOptions}>
 		<GenericList
 			title={TITLE}
 			path={BASE + PATH}

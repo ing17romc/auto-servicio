@@ -9,7 +9,7 @@ import {
 const { USUARIOS } = CONFIG.ROUTER
 const { EXIT_APP, START_APP } = CONFIG.ROUTER
 
-const Layout = ({ children }) => {
+const Layout = ({ children, breadcrumbOptions = [] }) => {
 	const router = useRouter()
 	const AuthUser = useAuthUser()
 
@@ -36,6 +36,7 @@ const Layout = ({ children }) => {
 		showSideBar={router.asPath === START_APP}
 		rightOptions={getRightOptions()}
 		getCurrentPath={(path) => event(path)}
+		breadcrumbOptions={breadcrumbOptions}
 	>
 		{children}
 	</UI.LayoutV2>
