@@ -15,6 +15,7 @@ import { getBreadcrumb } from '../../../lib/utils'
 const { TITLE } = CONTENT.WALMART.REGISTROS_ERRORES
 const { GENERIC } = CONTENT
 const { REGISTROS_ERRORES: API_LOGS } = CONFIG.API.WALMART
+const NODE_ENV = process.env.NODE_ENV
 
 const tableHeaders = <tr>
 	<th style={{ width: '10%' }}>Tipo</th>
@@ -144,7 +145,7 @@ const index = ({ data, options }) => {
 			<div className="container-body">
 				<div className="grid-primary ">
 					<div className="start-1 size-12 padding-v-20">
-						<Title label={TITLE} />
+						<Title label={`${TITLE} - ${NODE_ENV}`} />
 					</div>
 
 					<div className="start-1  padding-v-30" />
