@@ -116,14 +116,12 @@ const index = ({ data = [] }) => {
 		<Layout breadcrumbOptions={getBreadcrumb(router)}>
 			<div className="container-body">
 				<div className="grid-primary ">
-
 					<div className="grid-secondary">
-
-						<div className="start-1 size-10 padding-v-20">
-							<h3> {GENERIC.FILTROS} </h3>
+						<div className="start-1 size-23 padding-v-20">
+							<UI.Title label='Graficas' />
 						</div>
 
-						<div className="start-24 size-1 padding-v-20">
+						<div className="size-1 padding-v-20">
 							<UI.ImageButton
 								id="clear"
 								icon="clear"
@@ -134,44 +132,55 @@ const index = ({ data = [] }) => {
 						</div>
 					</div>
 
-					<div className="start-1 size-6 padding-v-20">
+					<div className="start-1  padding-v-30" />
+					<div className="grid-secondary bg-light-gray elevated">
 
-						<UI.Selector
-							id='anio'
-							value={state.anio}
-							options={getAnios(data)}
-							eventChange={e => onInputChange(e)}
-							titleTop='Año'
-						/>
-					</div>
-
-					<div className="start-1 size-6 padding-v-20 center">
-						<Graficas chartsTitle={'Venta en pesos'} dataSetTitle={state.anio} data={newData.map(x => x.totalVentaPrecio)} labels={newData.map(x => x.semana)}/>
-					</div>
-					<div className=" size-6 padding-v-20 center">
-						<Graficas chartsTitle={'Venta en unidades'} dataSetTitle={state.anio} data={newData.map(x => x.totalVentaCantidad)} labels={newData.map(x => x.semana)}/>
-					</div>
-					<div className="start-1 size-6 padding-v-20 center">
-						<Graficas chartsTitle={'Inventario'} dataSetTitle={state.anio} data={newData.map(x => x.totalInventario)} labels={newData.map(x => x.semana)}/>
-					</div>
-					<div className=" size-6 padding-v-20 center">
-						<div className="grid-secondary">
-							<Totales ventaUnidades={ventaUnidades} ventaPesos={ventaPesos} inventario={inventario} isVertical={true} />
+						<div className="start-1 size-10 padding-v-20">
+							<h3> {GENERIC.FILTROS} </h3>
 						</div>
-					</div>
 
-					<div className="start-1 size-12 padding-v-20 ">
-						<div className='bg-white padding-h-90 padding-v-30'>
-							<table>
-								<tbody>
-									{tableHeaders}
-									{getRows(newData)}
-								</tbody>
-							</table>
+						<div className="start-1 size-12 padding-v-20">
+
+							<UI.Selector
+								id='anio'
+								value={state.anio}
+								options={getAnios(data)}
+								eventChange={e => onInputChange(e)}
+								titleTop='Año'
+							/>
 						</div>
-					</div>
 
-					<div className="padding-v-20"></div>
+						<div className="start-1 size-12 padding-v-60 padding-h-60 center bg-white">
+							<Graficas chartsTitle={'Venta en pesos'} dataSetTitle={state.anio} data={newData.map(x => x.totalVentaPrecio)} labels={newData.map(x => x.semana)}/>
+						</div>
+						<div className=" size-12  padding-v-60 padding-h-60 center bg-white">
+							<Graficas chartsTitle={'Venta en unidades'} dataSetTitle={state.anio} data={newData.map(x => x.totalVentaCantidad)} labels={newData.map(x => x.semana)}/>
+						</div>
+						<div className="start-1 size-24  padding-v-20" />
+						<div className="start-1 size-12  padding-v-60 padding-h-60 center bg-white">
+							<Graficas chartsTitle={'Inventario'} dataSetTitle={state.anio} data={newData.map(x => x.totalInventario)} labels={newData.map(x => x.semana)}/>
+						</div>
+						<div className=" size-12  padding-v-60 padding-h-60 center bg-white">
+							<div className="grid-secondary">
+								<Totales ventaUnidades={ventaUnidades} ventaPesos={ventaPesos} inventario={inventario} isVertical={true} />
+							</div>
+						</div>
+
+						<div className="start-1 size-24  padding-v-20" />
+
+						<div className="start-1 size-24 padding-v-20 ">
+							<div className='bg-white padding-h-90 padding-v-30'>
+								<table>
+									<tbody>
+										{tableHeaders}
+										{getRows(newData)}
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<div className="padding-v-20"></div>
+					</div>
 				</div>
 			</div>
 		</Layout>
