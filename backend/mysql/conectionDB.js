@@ -11,7 +11,14 @@ const getConfig = () => {
 			password: process.env.DEV_MYSQL_PASSWORD
 		}
 	} else {
-		return process.env.DATABASE_URL
+		// return process.env.DATABASE_URL
+		return {
+			host: process.env.PROD_MYSQL_HOST,
+			port: process.env.PROD_MYSQL_PORT,
+			database: process.env.PROD_MYSQL_DATABASE,
+			user: process.env.PROD_MYSQL_USER,
+			password: process.env.PROD_MYSQL_PASSWORD
+		}
 	}
 }
 
