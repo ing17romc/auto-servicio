@@ -59,7 +59,7 @@ crea otro proyecto. Las rutas anteriores deben responder 404.
 
 ```powershell
 npm run openspec -- list
-npm run openspec -- validate reset-to-general-dashboard --strict
+npm run openspec -- validate --all --strict
 ```
 
 El comando usa OpenSpec 2.1.1 independientemente del ejecutable global.
