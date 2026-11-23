@@ -3,7 +3,7 @@
 - Antes de analizar o modificar codigo, leer el playbook personal si existe:
   `C:\Users\ing_r\iCloudDrive\AI-Coding-Standards\PLAYBOOK.md`.
   Si no existe en otra maquina, aplicar las convenciones del repositorio e informar la limitacion.
-- Trabajar siempre directamente en `main`. No crear ramas nuevas salvo solicitud explicita del usuario.
+- Trabajar siempre directamente en `master`. No crear ramas nuevas salvo solicitud explicita del usuario.
 - Mantener cambios acotados, proteger secretos y validar segun el alcance.
 - Runtime: Node.js 26.x; seleccionar la version de `.nvmrc` antes de ejecutar npm.
 - Frontend: Next.js Pages Router, una sola pantalla en `pages/index.js`, ruta `/`,

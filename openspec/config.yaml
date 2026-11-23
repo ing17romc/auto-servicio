@@ -4,7 +4,7 @@ context: |
   Language: Spanish. Write artifacts in Spanish; preserve OpenSpec structural
   headings and SHALL/MUST keywords in English.
   Auto-Servicio is a minimal Next.js 16 Pages Router application with React 19 and JavaScript.
-  Work directly on main; do not create branches unless the user explicitly requests one.
+  Work directly on master; do not create branches unless the user explicitly requests one.
   Runtime: Node.js 26.x; .nvmrc selects the validated local patch version.
   Frontend: pages/index.js at /, displaying only General Dashboard.
   backend/ and auxiliary top-level directories are empty placeholders.

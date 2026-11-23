@@ -44,3 +44,7 @@ Las verificaciones se ejecutaron mediante herramientas temporales fuera del proy
 ## Publicación solicitada posteriormente
 
 El usuario solicitó trabajar siempre directamente en `main`, sin crear ramas nuevas, y subir todos estos cambios a esa rama. Se actualizaron AGENTS.md, CLAUDE.md y el contexto OpenSpec con esta preferencia para el proyecto. El remoto solo tenía `master`; se creó `main` desde el estado validado sin reescribir ni borrar el historial o la rama anterior. La restricción de no publicar de la etapa de implementación queda sustituida por esta solicitud explícita de push; no se ejecuta un despliegue manual ni se modifica Vercel.
+
+## Corrección de la rama de trabajo
+
+El usuario corrigió la instrucción anterior: trabajar directamente en `master`, no en `main`. Se integraron los cambios mediante fast-forward en `master` y se actualizaron las instrucciones compartidas. Tras comprobar el push de `master`, se elimina la rama `main` local y remota sin perder sus commits. Esta corrección sustituye la preferencia anterior; no cambia la implementación ni solicita un despliegue manual.
