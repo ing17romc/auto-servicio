@@ -1,6 +1,6 @@
 # Auto-Servicio
 
-Base mínima con Next.js Pages Router. La única pantalla de producto está en `/`
+Base mínima con Next.js App Router. La única pantalla de producto está en `/`
 y muestra **General Dashboard**. Las pantallas y APIs de negocio anteriores fueron retiradas.
 
 ## Requisitos
@@ -33,7 +33,8 @@ npm start
 
 ## Estructura
 
-- `pages/index.js`: pantalla nueva, escrita desde cero.
+- `app/page.js`: pantalla General Dashboard como Server Component.
+- `app/layout.js`: documento raiz, idioma y metadata.
 - `backend/`: reservado, sin modelos, conexiones ni endpoints.
 - `components/`, `config/`, `constants/`, `content/`, `context/`, `lib/`:
   carpetas reservadas, sin código heredado.
@@ -41,8 +42,8 @@ npm start
 
 No hay variables de entorno obligatorias ni servicios externos necesarios para
 arrancar o compilar. `.env.example` contiene únicamente instrucciones sin secretos.
-MongoDB es la tecnología de datos elegida para una etapa posterior; todavía no
-hay driver ni conexión. Firebase y MySQL ya no forman parte de la aplicación.
+Express 5.3.0 y Mongoose 9.13.0 estan instalados para uso futuro. No hay servidor
+Express, endpoints, modelos ni conexion activa a MongoDB. Firebase y MySQL no forman parte de la aplicacion.
 
 Los archivos de entorno reales están ignorados por Git. Esto no borra secretos
 que ya existan en commits anteriores ni revoca sus credenciales.
@@ -117,7 +118,7 @@ No son necesarias para compilar la aplicación. No se guardan en archivos del re
 
 ### Skills incluidas
 
-Las mismas seis skills están versionadas para ambos asistentes:
+Las seis skills OpenSpec y siete skills oficiales adicionales estan versionadas para ambos asistentes:
 
 - `openspec-explore`: investigar y aclarar antes de implementar.
 - `openspec-propose`: crear propuesta, diseño, specs y tareas.
@@ -134,3 +135,40 @@ Fuentes: [Context7](https://github.com/upstash/context7),
 [MongoDB MCP](https://github.com/mongodb-js/mongodb-mcp-server),
 [MCP Claude Code](https://code.claude.com/docs/en/mcp) y
 [MCP Codex](https://developers.openai.com/codex/mcp).
+
+### Skills oficiales adicionales
+
+| Skill | Fuente | Uso |
+| --- | --- | --- |
+| `vercel-react-best-practices` | Vercel | Rendimiento React/Next.js, datos y bundles |
+| `web-design-guidelines` | Vercel | Interfaz, accesibilidad y UX |
+| `deploy-to-vercel` | Vercel | Despliegue cuando se solicite |
+| `mongodb-schema-design` | MongoDB | Modelado y validacion de esquemas |
+| `mongodb-query-optimizer` | MongoDB | Indices y rendimiento de consultas |
+| `mongodb-natural-language-querying` | MongoDB | Consultas de lectura y agregaciones |
+| `mongodb-connection` | MongoDB | Conexiones, pools y diagnostico |
+
+Son 13 skills por asistente, incluidas las seis OpenSpec. Los directorios completos
+estan copiados en `.agents/skills/` y `.claude/skills/`, sin symlinks ni necesidad
+de instalacion global. Estaran disponibles al iniciar una nueva sesion del asistente.
+
+Procedencia, commits y hashes: `tools/skills-sources.json`. Verificar integridad y paridad:
+
+```powershell
+npm run skills:check
+```
+
+Vercel declara MIT en el README de origen (se conserva ese aviso, pues no publica
+un LICENSE independiente en la raiz de ese commit). Las skills MongoDB incluyen
+su licencia Apache-2.0. No se ejecutan acciones al instalar estas guias: algunas
+operaciones requieren conexion MCP o una cuenta autorizada. El despliegue siempre
+debe respetar el proyecto Vercel existente y la solicitud explicita del usuario.
+
+### Dependencias futuras del backend
+
+Express y Mongoose son dependencias de ejecucion fijadas en `package.json` y el
+lockfile por solicitud del usuario. No estan importadas por `app/`, no se envian
+al navegador y no cambian `npm run dev` ni `npm start`: ambos ejecutan Next.js.
+`backend/` permanece reservado. Una etapa posterior definira la API, los modelos,
+la conexion y como integrar Express con el despliegue existente, sin asumir que
+instalarlo ya crea un servidor compatible con Vercel.

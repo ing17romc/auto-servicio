@@ -6,13 +6,17 @@
 - Trabajar siempre directamente en `master`. No crear ramas nuevas salvo solicitud explicita del usuario.
 - Mantener cambios acotados, proteger secretos y validar segun el alcance.
 - Runtime: Node.js 26.x; seleccionar la version de `.nvmrc` antes de ejecutar npm.
-- Frontend: Next.js Pages Router, una sola pantalla en `pages/index.js`, ruta `/`,
+- Frontend: Next.js App Router, una sola pantalla en `app/page.js`, ruta `/`,
   cuyo unico contenido visible es `General Dashboard`.
-- `backend/` y las carpetas auxiliares estan vacias y reservadas. No hay endpoints,
-  autenticacion ni conexiones a bases de datos. MongoDB se integrara en otra etapa.
+- `backend/` y auxiliares estan reservados. Express y Mongoose estan instalados para uso futuro,
+  sin servidor, endpoints, modelos, autenticacion ni conexion activa a MongoDB.
 - MCP compartidos: Context7 para documentacion, Playwright para navegador y MongoDB en solo lectura.
 - Configuraciones: `.mcp.json` (Claude Code), `.codex/config.toml` (Codex). Preparar con `npm run mcp:setup`.
 - Los MCP viven en `tools/mcp/`, separados del backend. Sus credenciales son variables de entorno del asistente; no imprimirlas.
+- Skills: seis OpenSpec y siete oficiales Vercel/MongoDB en ambos clientes; fuentes en `tools/skills-sources.json`.
+- Ejecutar `npm run skills:check` al modificar el catalogo. No editar copias oficiales sin actualizar procedencia y hashes.
+- App Router usa Server Components por defecto; no importar Express o Mongoose en componentes cliente.
+- La skill de despliegue debe reutilizar Vercel existente; instalarla no autoriza publicar.
 - No reutilizar ni restaurar logica, dependencias o configuracion heredadas.
 - Usar las skills `openspec-*` para los cambios solicitados mediante ese flujo.
   Ejecutar el CLI como `npm run openspec -- <argumentos>` (version 2.1.1).

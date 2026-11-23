@@ -1,0 +1,3 @@
+# Preserve the exact upstream bytes used by skills-sources.json hashes.
+/.agents/skills/** -text
+/.claude/skills/** -text

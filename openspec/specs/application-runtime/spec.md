@@ -22,11 +22,15 @@ El proyecto SHALL permitir instalar con `npm ci`, iniciar desarrollo con `npm ru
 - **THEN** la instalación y compilación terminan correctamente y el servidor de producción atiende `/`
 
 ### Requirement: Independencia de las integraciones retiradas
-La instalación y ejecución SHALL funcionar sin Firebase, MySQL, drivers de MongoDB ni librerías de interfaz heredadas. Esta etapa SHALL mantener cero APIs y cero conexiones a bases de datos.
+La instalación y ejecución SHALL funcionar sin Firebase, MySQL ni librerías de interfaz heredadas. Express y Mongoose SHALL estar instalados para uso futuro sin iniciar servidores, crear APIs o conectar bases de datos durante el arranque del dashboard.
 
 #### Scenario: Operación con servicios externos ausentes
 - **WHEN** se inicia el dashboard sin acceso a Firebase, MySQL o MongoDB
 - **THEN** el arranque no requiere autenticación ni acceso a esos servicios y la pantalla permanece disponible
+
+#### Scenario: Dependencias de backend disponibles
+- **WHEN** se importan Express y Mongoose después de una instalación limpia
+- **THEN** ambas dependencias se resuelven localmente y Mongoose permanece desconectado sin abrir puertos ni requerir credenciales
 
 ### Requirement: Configuración sin secretos versionados
 La base resultante SHALL excluir archivos de entorno reales del seguimiento de Git y ofrecer un ejemplo sin credenciales. Los secretos SHALL estar ausentes del HTML y de los recursos enviados al navegador.
@@ -43,3 +47,10 @@ El cambio SHALL conservar el historial y remoto existentes de GitHub y permitir 
 - **WHEN** se prepara el build con el preset de Next.js, la raíz del repositorio y Node.js 26.x
 - **THEN** se usa el mismo repositorio y destino Vercel existente
 - **AND** la limpieza local no publica automáticamente ni modifica recursos externos
+
+### Requirement: Renderizado inicial desde servidor
+La pantalla SHALL entregar el encabezado `General Dashboard` en el HTML inicial, sin enviar Express, Mongoose ni sus credenciales al navegador.
+
+#### Scenario: Solicitud sin JavaScript
+- **WHEN** se solicita `/` con JavaScript deshabilitado
+- **THEN** se puede leer el encabezado, el documento tiene idioma inglés y título `General Dashboard`, y no hay dependencias de backend en los recursos cliente
