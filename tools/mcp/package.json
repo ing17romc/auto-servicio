@@ -1,0 +1,11 @@
+{
+  "name": "auto-servicio-mcp-tools",
+  "version": "1.0.0",
+  "private": true,
+  "engines": { "node": "26.x" },
+  "dependencies": {
+    "@playwright/mcp": "0.0.86",
+    "@upstash/context7-mcp": "4.7.3",
+    "mongodb-mcp-server": "3.3.0"
+  }
+}

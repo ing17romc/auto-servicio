@@ -1,0 +1,22 @@
+# Configuracion de proyecto: abrir Codex en la raiz y confiar en el proyecto.
+# Preparar primero las herramientas con npm run mcp:setup.
+
+[mcp_servers.context7]
+command = "node"
+args = ["tools/mcp/node_modules/@upstash/context7-mcp/dist/index.js"]
+env_vars = ["CONTEXT7_API_KEY"]
+startup_timeout_sec = 60
+
+[mcp_servers.playwright]
+command = "node"
+args = ["tools/mcp/node_modules/@playwright/mcp/cli.js", "--browser", "chrome", "--headless", "--isolated"]
+startup_timeout_sec = 60
+
+[mcp_servers.mongodb]
+command = "node"
+args = ["tools/mcp/node_modules/mongodb-mcp-server/dist/esm/index.js", "--readOnly"]
+env_vars = ["MDB_MCP_CONNECTION_STRING"]
+startup_timeout_sec = 60
+
+[mcp_servers.mongodb.env]
+MDB_MCP_TELEMETRY = "disabled"

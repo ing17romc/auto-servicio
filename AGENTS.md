@@ -10,6 +10,9 @@
   cuyo unico contenido visible es `General Dashboard`.
 - `backend/` y las carpetas auxiliares estan vacias y reservadas. No hay endpoints,
   autenticacion ni conexiones a bases de datos. MongoDB se integrara en otra etapa.
+- MCP compartidos: Context7 para documentacion, Playwright para navegador y MongoDB en solo lectura.
+- Configuraciones: `.mcp.json` (Claude Code), `.codex/config.toml` (Codex). Preparar con `npm run mcp:setup`.
+- Los MCP viven en `tools/mcp/`, separados del backend. Sus credenciales son variables de entorno del asistente; no imprimirlas.
 - No reutilizar ni restaurar logica, dependencias o configuracion heredadas.
 - Usar las skills `openspec-*` para los cambios solicitados mediante ese flujo.
   Ejecutar el CLI como `npm run openspec -- <argumentos>` (version 2.1.1).

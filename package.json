@@ -10,7 +10,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "openspec": "npx --yes @fission-ai/openspec@2.1.1"
+    "openspec": "npx --yes @fission-ai/openspec@2.1.1",
+    "mcp:setup": "npm --prefix tools/mcp ci --no-audit --no-fund"
   },
   "dependencies": {
     "next": "16.4.6",

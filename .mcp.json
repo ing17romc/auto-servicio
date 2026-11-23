@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "node",
+      "args": ["tools/mcp/node_modules/@upstash/context7-mcp/dist/index.js"]
+    },
+    "playwright": {
+      "command": "node",
+      "args": ["tools/mcp/node_modules/@playwright/mcp/cli.js", "--browser", "chrome", "--headless", "--isolated"]
+    },
+    "mongodb": {
+      "command": "node",
+      "args": ["tools/mcp/node_modules/mongodb-mcp-server/dist/esm/index.js", "--readOnly"],
+      "env": {
+        "MDB_MCP_TELEMETRY": "disabled"
+      }
+    }
+  }
+}

@@ -11,7 +11,9 @@ context: |
   No API endpoints, authentication, database drivers or database connections exist.
   MongoDB is the future database choice; no external service or environment variable is required now.
   Never restore legacy business logic or expose credentials in specs, logs or examples.
-  Scripts: dev, build, start, lint and openspec. Use npm ci for reproducible installs.
+  Assistant tooling: Context7, Playwright and read-only MongoDB MCP, isolated in tools/mcp/.
+  Shared MCP configs: .mcp.json (Claude Code), .codex/config.toml (Codex); credentials stay in assistant environment.
+  Scripts: dev, build, start, lint, mcp:setup and openspec. Use npm ci for reproducible installs.
   Keep the existing GitHub remote and Vercel project; remote Vercel settings need verification before publishing.
   Run OpenSpec through npm run openspec -- <arguments> to use pinned version 2.1.1.
 
