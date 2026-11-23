@@ -3,25 +3,27 @@ schema: spec-driven
 context: |
   Language: Spanish. Write artifacts in Spanish; preserve OpenSpec structural
   headings and SHALL/MUST keywords in English.
-  Auto-Servicio is a Next.js 11 Pages Router application with React 17 and JavaScript.
-  Frontend: pages/, components/, content/, context/, lib/ and config/.
-  Backend: pages/api/ endpoints with database access in backend/mysql/ and backend/mongodb/.
-  MySQL stores business data; MongoDB stores event/error logs; Firebase handles authentication.
-  MySQL uses DEV_MYSQL_* or PROD_MYSQL_* by NODE_ENV; MongoDB uses MONGODB_URI.
-  Never copy environment values or credentials into specs, logs or examples.
-  Database availability is not guaranteed: diagnose connections before relying on live data.
-  Existing npm scripts: dev. No build or test script is currently defined.
+  Auto-Servicio is a minimal Next.js 16 Pages Router application with React 19 and JavaScript.
+  Work directly on main; do not create branches unless the user explicitly requests one.
+  Runtime: Node.js 26.x; .nvmrc selects the validated local patch version.
+  Frontend: pages/index.js at /, displaying only General Dashboard.
+  backend/ and auxiliary top-level directories are empty placeholders.
+  No API endpoints, authentication, database drivers or database connections exist.
+  MongoDB is the future database choice; no external service or environment variable is required now.
+  Never restore legacy business logic or expose credentials in specs, logs or examples.
+  Scripts: dev, build, start, lint and openspec. Use npm ci for reproducible installs.
+  Keep the existing GitHub remote and Vercel project; remote Vercel settings need verification before publishing.
   Run OpenSpec through npm run openspec -- <arguments> to use pinned version 2.1.1.
 
 rules:
   proposal:
     - Define scope and acceptance criteria; distinguish configuration from verified runtime behavior.
   tasks:
-    - Include validation appropriate to the change and describe required database prerequisites.
+    - Include validation appropriate to the change; introduce database prerequisites only for actual data features.
 
 operations:
   apply:
     guidance:
       - Follow AGENTS.md and the personal playbook when available.
-      - Keep changes scoped and follow the existing project patterns.
-      - Run relevant available checks and state any checks blocked by missing services.
+      - Keep changes scoped and preserve the frontend/backend organization.
+      - Run relevant available checks with Node.js 26.x and report limitations.

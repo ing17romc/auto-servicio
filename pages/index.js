@@ -1,23 +1,13 @@
+import Head from 'next/head'
 
-import Layout from 'components/Layout'
-import {
-	AuthAction,
-	withAuthUser,
-	withAuthUserTokenSSR
-} from 'next-firebase-auth'
-
-const index = () => {
-	return <Layout>
-		<div className='main-container padding-h-40'>
-			<h1>Bienvenido!!!</h1>
-		</div>
-	</Layout>
+export default function GeneralDashboard() {
+  return (
+    <>
+      <Head>
+        <title>General Dashboard</title>
+        <link rel="icon" href="data:," />
+      </Head>
+      <h1>General Dashboard</h1>
+    </>
+  )
 }
-
-export const getServerSideProps = withAuthUserTokenSSR({
-	whenUnauthed: AuthAction.REDIRECT_TO_LOGIN
-})()
-
-export default withAuthUser({
-	whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN
-})(index)

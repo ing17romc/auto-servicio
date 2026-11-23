@@ -4,6 +4,8 @@ Leer y aplicar las instrucciones compartidas del proyecto:
 
 @AGENTS.md
 
-OpenSpec esta instalado para este repositorio. Sus skills estan en
-`.claude/skills/`; las especificaciones y cambios viven en `openspec/`.
-Usar `npm run openspec -- <argumentos>` para ejecutar la version fijada.
+Trabajar directamente en `main`, sin crear ramas salvo solicitud explicita.
+Usar Node.js 26.x. El frontend contiene solo `General Dashboard` en `/`;
+`backend/` esta reservado y vacio. MongoDB es una integracion futura.
+Las skills OpenSpec estan en `.claude/skills/`; especificaciones y cambios en
+`openspec/`. Ejecutar `npm run openspec -- <argumentos>` para la version fijada.
