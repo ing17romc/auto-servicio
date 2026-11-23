@@ -1,0 +1,27 @@
+schema: spec-driven
+
+context: |
+  Language: Spanish. Write artifacts in Spanish; preserve OpenSpec structural
+  headings and SHALL/MUST keywords in English.
+  Auto-Servicio is a Next.js 11 Pages Router application with React 17 and JavaScript.
+  Frontend: pages/, components/, content/, context/, lib/ and config/.
+  Backend: pages/api/ endpoints with database access in backend/mysql/ and backend/mongodb/.
+  MySQL stores business data; MongoDB stores event/error logs; Firebase handles authentication.
+  MySQL uses DEV_MYSQL_* or PROD_MYSQL_* by NODE_ENV; MongoDB uses MONGODB_URI.
+  Never copy environment values or credentials into specs, logs or examples.
+  Database availability is not guaranteed: diagnose connections before relying on live data.
+  Existing npm scripts: dev. No build or test script is currently defined.
+  Run OpenSpec through npm run openspec -- <arguments> to use pinned version 2.1.1.
+
+rules:
+  proposal:
+    - Define scope and acceptance criteria; distinguish configuration from verified runtime behavior.
+  tasks:
+    - Include validation appropriate to the change and describe required database prerequisites.
+
+operations:
+  apply:
+    guidance:
+      - Follow AGENTS.md and the personal playbook when available.
+      - Keep changes scoped and follow the existing project patterns.
+      - Run relevant available checks and state any checks blocked by missing services.

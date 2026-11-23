@@ -30,7 +30,8 @@
     "eslint-plugin-react": "7.31.8"
   },
   "scripts": {
-    "dev": "next"
+    "dev": "next",
+    "openspec": "npx --yes @fission-ai/openspec@2.1.1"
   },
   "keywords": [],
   "author": "",
