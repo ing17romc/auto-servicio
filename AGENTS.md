@@ -6,10 +6,18 @@
 - Trabajar siempre directamente en `master`. No crear ramas nuevas salvo solicitud explicita del usuario.
 - Mantener cambios acotados, proteger secretos y validar segun el alcance.
 - Runtime: Node.js 26.x; seleccionar la version de `.nvmrc` antes de ejecutar npm.
-- Frontend: Next.js App Router, una sola pantalla en `app/page.js`, ruta `/`,
-  cuyo unico contenido visible es `General Dashboard`.
-- `backend/` y auxiliares estan reservados. Express y Mongoose estan instalados para uso futuro,
-  sin servidor, endpoints, modelos, autenticacion ni conexion activa a MongoDB.
+- Frontend: Next.js App Router; `/` login Google, `/pending` acceso pendiente,
+  `/dashboard` General Dashboard, `/users` y `/users/activity` solo administradores.
+- `backend/` contiene autenticacion Better Auth, permisos y persistencia MongoDB server-only.
+  Express y Mongoose permanecen instalados e inactivos; no iniciar otro servidor.
+- Roles: pending/user/admin; comprobar sesion y rol actual en cada operacion protegida.
+  Los cambios de rol y el primer administrador requieren las transacciones definidas.
+- Navegacion a dashboard con carga de documento; no usar prefetch ni conteo con useEffect.
+  `proxy.js` autoriza y registra una entrada por documento antes de renderizar.
+- Build sin credenciales; operacion autenticada requiere Google y una base nueva MongoDB
+  con replica set. No conectar durante importacion/build ni usar bases heredadas.
+- Pruebas: `npm test` y `npm run test:e2e` (requiere build y Chrome); crean replica sets
+  temporales aislados. Nunca apuntarlas a una base real ni añadir bypass OAuth en produccion.
 - MCP compartidos: Context7 para documentacion, Playwright para navegador y MongoDB en solo lectura.
 - Configuraciones: `.mcp.json` (Claude Code), `.codex/config.toml` (Codex). Preparar con `npm run mcp:setup`.
 - Los MCP viven en `tools/mcp/`, separados del backend. Sus credenciales son variables de entorno del asistente; no imprimirlas.

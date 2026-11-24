@@ -1,174 +1,124 @@
 # Auto-Servicio
 
-Base mínima con Next.js App Router. La única pantalla de producto está en `/`
-y muestra **General Dashboard**. Las pantallas y APIs de negocio anteriores fueron retiradas.
+Portal Next.js App Router con acceso Google, autorización por roles y estadísticas de entradas al dashboard. Trabajar directamente en `master`. No se ha publicado este cambio.
 
-## Requisitos
+## Preparación
 
-- Node.js **26.x** (validado con **26.13.1**, fijado en `.nvmrc`).
-- npm. Las versiones exactas de dependencias están en `package-lock.json`.
-
-Con nvm-windows instalado, selecciona la versión antes de usar npm:
+Usar Node.js 26.13.1, fijado en `.nvmrc`, antes de cualquier comando npm:
 
 ```powershell
-nvm install 26.13.1
 nvm use 26.13.1
 node --version
 npm ci
 npm run dev
 ```
 
-También puedes utilizar una instalación aislada de Node.js 26; su directorio debe
-estar primero en `PATH` durante todos los comandos. No se instala Node como dependencia.
+Si no hay nvm, usar un runtime aislado con su directorio al principio de PATH. En Windows el wrapper global npm.ps1 puede usar su Node adyacente: ejecutar `node RUTA_A_NPM/npm-cli.js <argumentos>` con el binario Node 26 explícito en ese caso.
 
-Abre [http://localhost:3000](http://localhost:3000).
+Sin configuración privada, `/` muestra el login deshabilitado y un mensaje claro. Instalación y `npm run build` no necesitan base ni credenciales. No hay contraseñas propias, Firebase, MySQL ni lógica heredada. Express y Mongoose siguen instalados e inactivos.
 
-## Validación y producción local
+## Configuración privada
+
+Copiar `.env.example` a `.env.local` y completar sin versionar sus valores:
+
+| Variable | Uso |
+| --- | --- |
+| MONGODB_URI | URI privada de una base nueva; replica set o Atlas con transacciones |
+| MONGODB_DB | Nombre exclusivo de la base del portal |
+| BETTER_AUTH_URL | Origen exacto: http://localhost:3000 en local; HTTPS en producción |
+| BETTER_AUTH_SECRET | Secreto aleatorio de al menos 32 caracteres; no usar un ejemplo fijo |
+| GOOGLE_CLIENT_ID | Cliente OAuth web de Google |
+| GOOGLE_CLIENT_SECRET | Secreto privado de ese cliente |
+
+Crear/configurar el cliente en Google Cloud y su pantalla de consentimiento. En modo de prueba agregar las cuentas autorizadas para probar. Registrar las redirecciones exactas:
+
+- Local: `http://localhost:3000/api/auth/callback/google`.
+- Producción: el origen real seguido de `/api/auth/callback/google`.
+
+Solo se solicitan identidad básica, perfil y correo; no permisos de Gmail/Drive. No se guardan tokens de acceso, refresh ni ID tokens del proveedor. Vincular cuentas automáticamente por correo está deshabilitado. Una coincidencia de correo con otra identidad se rechaza. Microsoft está evaluado en el diseño y queda fuera de esta versión.
+
+Ver [Google en Better Auth](https://better-auth.com/docs/authentication/google) y [Microsoft](https://better-auth.com/docs/authentication/microsoft).
+
+Preparar colecciones, validadores e índices de forma explícita después de configurar una base nueva:
+
+```powershell
+npm run db:setup
+```
+
+El script carga `.env.local` y es idempotente. No borra colecciones. Puede fallar ante índices existentes incompatibles o permisos insuficientes: revisar la base seleccionada, sin eliminar datos automáticamente. La aplicación no modifica índices desde el build.
+
+## Roles y rutas
+
+| Rol | Acceso |
+| --- | --- |
+| Pendiente (pending) | `/pending`, mensaje de aprobación pendiente y cierre de sesión |
+| Usuario (user) | `/dashboard` |
+| Administrador (admin) | Dashboard, `/users`, `/users/activity` y asignación de roles |
+
+`/` es el login y redirige según el rol cuando ya hay sesión. Toda cuenta nueva inicia Pendiente. Cada operación protegida verifica sesión persistida y rol actual. Un cambio de rol afecta la siguiente operación, incluidas sesiones abiertas. Cookies HttpOnly y SameSite=Lax, Secure en HTTPS; sesiones de siete días, revocables y sin caché de sesión en cookie. La navegación interna usa cargas de documento para revalidar permisos y registrar entradas.
+
+Las operaciones administrativas responden 401 sin sesión y 403 sin permiso antes de ejecutarse. Cada Server Action revalida identidad, origen y entradas; el cambio de rol comprueba también la sesión y rol del actor dentro de la transacción. No hay edición pública de perfiles, vinculación, eliminación ni endpoints de contraseñas.
+
+`/users` permite buscar por nombre/correo, filtrar rol, paginar y asignar permisos. Muestra proveedor, registro, último login, último acceso y entradas acumuladas. El último administrador no puede degradarse. Cambios concurrentes se serializan y se auditan en la misma transacción.
+
+### Primer administrador
+
+1. Preparar MongoDB y Google como se indica arriba.
+2. Iniciar sesión con la cuenta Google del operador: quedará Pendiente.
+3. Consultar de forma privada su usuario interno en la colección `user`, verificando la relación en `account` con providerId `google`. El identificador interno es `_id`, no el correo ni el identificador externo.
+4. Ejecutar en terminal privada:
+
+```powershell
+npm run admin:bootstrap -- ID_INTERNO_REGISTRADO
+```
+
+El script promueve exactamente esa cuenta, registra actor `system:bootstrap` y bloquea repeticiones. No tiene endpoint público. Volver a `/` para acceder. Los administradores siguientes se asignan desde Usuarios. No enviar credenciales o datos personales por chat ni guardarlos en el repositorio.
+
+## Persistencia y actividad
+
+- `user`, `account`, `session`, `verification`: datos del adaptador de autenticación; identidad interna independiente del correo.
+- `portalProfiles`: rol, versión, fechas y contador acumulado. No se aceptan roles del proveedor ni del cliente durante registro.
+- `accessEvents`: eventos `sign_in` y `dashboard_entry`, fecha UTC y usuario. Detalle por 365 días.
+- `roleAudit`: actor, objetivo, rol anterior/nuevo y fecha. Retención de 730 días.
+- `accessControlState`: control transaccional del primer/último administrador.
+
+Los eventos no contienen cookies, tokens, IP ni user agent. El perfil conserva contador y última fecha aun cuando expire el detalle. TTL se ejecuta de forma asíncrona; las consultas excluyen eventos vencidos aunque todavía no se hayan eliminado físicamente.
+
+Una entrada significa una navegación de documento autorizada a `/dashboard`. Cada recarga cuenta. Recursos, RSC, precargas y accesos denegados no cuentan. Un reintento técnico con el mismo identificador no duplica el evento ni el contador. Una respuesta abandonada por el navegador puede quedar contada: no mide lectura ni duración. Si falla el registro, se devuelve un estado de servicio no disponible antes de confirmar el dashboard.
+
+`/users/activity` muestra gráfica diaria accesible, tabla equivalente, total del período y usuarios únicos, con filtros por fechas y usuario. Rango inicial de 30 días, con fechas y agrupación en America/Mexico_City; se admiten días completos dentro de la retención disponible. Los totales del período no son el acumulado histórico. Los errores de consulta se muestran como errores, nunca como ceros.
+
+El pool parte de cinco conexiones por proceso/instancia, cero mínimas y 30 segundos de inactividad, para el portal inicial en Vercel. Timeouts de selección/conexión/cola de cinco segundos y operaciones/transacciones de diez segundos. Son valores iniciales; medir latencia, concurrencia, colas, conexiones de Atlas y cantidad de instancias antes de ajustarlos. No cerrar el cliente por petición.
+
+## Validación
 
 ```powershell
 npm run lint
 npm run build
-npm start
-```
-
-## Estructura
-
-- `app/page.js`: pantalla General Dashboard como Server Component.
-- `app/layout.js`: documento raiz, idioma y metadata.
-- `backend/`: reservado, sin modelos, conexiones ni endpoints.
-- `components/`, `config/`, `constants/`, `content/`, `context/`, `lib/`:
-  carpetas reservadas, sin código heredado.
-- `openspec/`: especificaciones y cambios; skills en `.agents/skills/` y `.claude/skills/`.
-
-No hay variables de entorno obligatorias ni servicios externos necesarios para
-arrancar o compilar. `.env.example` contiene únicamente instrucciones sin secretos.
-Express 5.3.0 y Mongoose 9.13.0 estan instalados para uso futuro. No hay servidor
-Express, endpoints, modelos ni conexion activa a MongoDB. Firebase y MySQL no forman parte de la aplicacion.
-
-Los archivos de entorno reales están ignorados por Git. Esto no borra secretos
-que ya existan en commits anteriores ni revoca sus credenciales.
-
-## Vercel
-
-Conservar el repositorio GitHub y el proyecto Vercel existentes. Antes de publicar,
-verificar en ese proyecto: preset **Next.js**, raíz del repositorio, Node.js **26.x**,
-build `npm run build` e instalación `npm ci`; revisar cualquier override antiguo.
-La configuración remota no está verificada localmente. La limpieza no publica ni
-crea otro proyecto. Las rutas anteriores deben responder 404.
-
-## OpenSpec
-
-```powershell
-npm run openspec -- list
+npm test
+npm run test:e2e
 npm run openspec -- validate --all --strict
 ```
 
-El comando usa OpenSpec 2.1.1 independientemente del ejecutable global.
+`npm test` crea un replica set temporal MongoDB 8.2.3 y elimina solamente ese entorno al terminar. Primera ejecución descarga el binario MongoDB en caché local (Windows: aproximadamente 780 MB). Prueba OAuth Google simulado con firmas RSA, estado y cookies reales de la librería, concurrencia, roles, auditoría y estadísticas. El mock existe exclusivamente en archivos de pruebas; no hay variable para habilitarlo en producción.
 
-## Herramientas de IA compartidas (Claude Code y Codex)
+`test:e2e` requiere Google Chrome instalado y un build previo. Inicia el build en puerto 3137 con otra base temporal y cuentas sintéticas, usa Chrome headless mediante Playwright y cierra procesos al terminar. Valida login, pendiente, dashboard sin JavaScript, administración, cambio efectivo de rol, gráfica, móvil, 401/403, conteo y cierre/revocación. Estas pruebas nunca usan una base real ni sustituyen la validación manual del proveedor Google con credenciales privadas.
 
-Configuración versionada:
+El inventario retirado conserva 404 en sus rutas de negocio y APIs; las rutas nuevas de arriba no restauran funcionalidades anteriores.
 
-| Herramienta | Uso | Configuración |
-| --- | --- | --- |
-| OpenSpec 2.1.1 | Explorar, proponer, actualizar, aplicar, sincronizar y archivar cambios | `.agents/skills/`, `.claude/skills/`, `openspec/` |
-| Context7 MCP 4.7.3 | Documentación de librerías | `.mcp.json` y `.codex/config.toml` |
-| Playwright MCP 0.0.86 | Navegador de pruebas aislado y sin ventana | `.mcp.json` y `.codex/config.toml` |
-| MongoDB MCP 3.3.0 | Consultas e inspección de datos en solo lectura | `.mcp.json` y `.codex/config.toml` |
+## Organización y herramientas
 
-Los MCP se instalan por separado en `tools/mcp/node_modules/`; no son dependencias
-de producción ni añaden conexiones al backend. Sus versiones y dependencias se
-fijan en `tools/mcp/package-lock.json`. No hace falta instalar plugins duplicados.
+- `app/`: rutas, Server Actions y estilos; Server Components por defecto.
+- `backend/auth/`: Better Auth y lectura de identidad; `backend/db/`: cliente y preparación; `backend/portal.mjs`: operaciones del dominio.
+- `proxy.js`: autorización previa al render y registro de entrada por documento.
+- `components/`: navegación, controles de sesión/roles y gráfica.
+- `tests/`: pruebas puras, integración y navegador sobre datos sintéticos.
+- `tools/mcp/`: herramientas del asistente aisladas del backend. Preparar con `npm run mcp:setup`.
 
-### Preparación en otra máquina
+Context7, Playwright y MongoDB de solo lectura mantienen sus configuraciones `.mcp.json` y `.codex/config.toml`. Las credenciales del asistente son diferentes de las credenciales de la aplicación; no imprimirlas ni reutilizarlas como URI de la base nueva. Las 13 skills se conservan sin cambios: `npm run skills:check` verifica hashes y paridad.
 
-1. Instalar Git, Node.js 26.x con npm y Claude Code o Codex; iniciar sesión en el asistente.
-2. Clonar `master`, abrir una terminal en la raíz del repositorio y ejecutar:
+## Publicación y recuperación
 
-```powershell
-npm ci
-npm run mcp:setup
-npm run openspec -- list
-```
+Conservar remoto GitHub y proyecto Vercel existentes. No se hace push ni deploy como parte de implementar. Una publicación posterior debe revisar variables privadas, callbacks Google, Node 26.x, preset Next.js, raíz y comandos del proyecto Vercel existente.
 
-3. Instalar Google Chrome si no está disponible: Playwright MCP usa `chrome`
-   en modo headless con un perfil aislado, sin usar tus sesiones personales.
-4. Abrir el asistente desde la raíz. En Claude Code, aceptar los MCP del proyecto
-   y revisar `/mcp`; en Codex, confiar en el proyecto, abrir una sesión nueva y
-   revisar sus MCP. Los archivos no transfieren sesiones, permisos ni credenciales.
-
-Las rutas de los ejecutables MCP son relativas a la raíz del repositorio. Ambos
-clientes ejecutan `node` desde PATH; debe apuntar a Node.js 26.x. El playbook
-personal externo se debe copiar por separado si se quiere usar en esa máquina.
-
-### Credenciales opcionales de las herramientas
-
-No son necesarias para compilar la aplicación. No se guardan en archivos del repositorio.
-
-- Context7 puede funcionar sin clave con límites del servicio; para una cuenta propia,
-  definir `CONTEXT7_API_KEY` en el entorno del proceso que inicia el asistente.
-- MongoDB necesita `MDB_MCP_CONNECTION_STRING` con una URI válida para consultar
-  datos. Sin ella, el MCP puede iniciar y exponer sus herramientas, pero no hay
-  conexión a ninguna base. Utilizar un usuario de base de datos con permisos de lectura.
-- La configuración pasa `--readOnly` al servidor MongoDB y desactiva su telemetría.
-  No recupera la URI antigua ni configura el backend de la aplicación.
-- Las variables en `.env.local` de Next.js no se cargan automáticamente en el
-  asistente. Exportarlas de forma privada antes de iniciarlo; reiniciar el asistente
-  después de cambiarlas. No pegar claves o URI en prompts, commits o argumentos CLI.
-
-### Skills incluidas
-
-Las seis skills OpenSpec y siete skills oficiales adicionales estan versionadas para ambos asistentes:
-
-- `openspec-explore`: investigar y aclarar antes de implementar.
-- `openspec-propose`: crear propuesta, diseño, specs y tareas.
-- `openspec-update-change`: actualizar un plan existente.
-- `openspec-apply-change`: implementar las tareas.
-- `openspec-sync-specs`: sincronizar especificaciones.
-- `openspec-archive-change`: archivar un cambio terminado.
-
-En Claude Code se invocan con `/nombre-de-skill`; en Codex se seleccionan desde
-Skills o se usan por nombre. No es necesario volver a inicializar OpenSpec al clonar.
-
-Fuentes: [Context7](https://github.com/upstash/context7),
-[Playwright MCP](https://github.com/microsoft/playwright-mcp),
-[MongoDB MCP](https://github.com/mongodb-js/mongodb-mcp-server),
-[MCP Claude Code](https://code.claude.com/docs/en/mcp) y
-[MCP Codex](https://developers.openai.com/codex/mcp).
-
-### Skills oficiales adicionales
-
-| Skill | Fuente | Uso |
-| --- | --- | --- |
-| `vercel-react-best-practices` | Vercel | Rendimiento React/Next.js, datos y bundles |
-| `web-design-guidelines` | Vercel | Interfaz, accesibilidad y UX |
-| `deploy-to-vercel` | Vercel | Despliegue cuando se solicite |
-| `mongodb-schema-design` | MongoDB | Modelado y validacion de esquemas |
-| `mongodb-query-optimizer` | MongoDB | Indices y rendimiento de consultas |
-| `mongodb-natural-language-querying` | MongoDB | Consultas de lectura y agregaciones |
-| `mongodb-connection` | MongoDB | Conexiones, pools y diagnostico |
-
-Son 13 skills por asistente, incluidas las seis OpenSpec. Los directorios completos
-estan copiados en `.agents/skills/` y `.claude/skills/`, sin symlinks ni necesidad
-de instalacion global. Estaran disponibles al iniciar una nueva sesion del asistente.
-
-Procedencia, commits y hashes: `tools/skills-sources.json`. Verificar integridad y paridad:
-
-```powershell
-npm run skills:check
-```
-
-Vercel declara MIT en el README de origen (se conserva ese aviso, pues no publica
-un LICENSE independiente en la raiz de ese commit). Las skills MongoDB incluyen
-su licencia Apache-2.0. No se ejecutan acciones al instalar estas guias: algunas
-operaciones requieren conexion MCP o una cuenta autorizada. El despliegue siempre
-debe respetar el proyecto Vercel existente y la solicitud explicita del usuario.
-
-### Dependencias futuras del backend
-
-Express y Mongoose son dependencias de ejecucion fijadas en `package.json` y el
-lockfile por solicitud del usuario. No estan importadas por `app/`, no se envian
-al navegador y no cambian `npm run dev` ni `npm start`: ambos ejecutan Next.js.
-`backend/` permanece reservado. Una etapa posterior definira la API, los modelos,
-la conexion y como integrar Express con el despliegue existente, sin asumir que
-instalarlo ya crea un servidor compatible con Vercel.
+Si falla la autorización en una publicación futura, cerrar temporalmente el acceso y volver a una versión protegida validada; no restaurar automáticamente el dashboard público. Conservar la base para diagnóstico sin borrar usuarios ni eventos.

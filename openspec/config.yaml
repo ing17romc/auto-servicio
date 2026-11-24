@@ -6,15 +6,18 @@ context: |
   Auto-Servicio is a minimal Next.js 16 App Router application with React 19 and JavaScript.
   Work directly on master; do not create branches unless the user explicitly requests one.
   Runtime: Node.js 26.x; .nvmrc selects the validated local patch version.
-  Frontend: app/page.js and app/layout.js at /, displaying only General Dashboard.
-  backend/ and auxiliary top-level directories are empty placeholders.
-  Express 5.3.0 and Mongoose 9.13.0 are installed for future backend work; no active server, API, models or database connection exist.
-  MongoDB is the future database choice; no external service or environment variable is required now.
+  Frontend: Google login at /, /pending, protected /dashboard, admin-only /users and /users/activity.
+  backend/ contains server-only Better Auth, MongoDB persistence and role authorization.
+  Express 5.3.0 and Mongoose 9.13.0 remain installed and inactive; Next.js handles server routes.
+  Roles pending/user/admin; server checks current database session and role per protected operation.
+  MongoDB replica set and Google OAuth credentials are required for authenticated runtime, not for build.
+  Dashboard document navigation is counted in proxy.js; prefetch and RSC do not add events.
+  Tests use isolated temporary replica sets and synthetic OAuth only inside test files.
   Never restore legacy business logic or expose credentials in specs, logs or examples.
   Assistant tooling: Context7, Playwright and read-only MongoDB MCP, isolated in tools/mcp/.
   Shared MCP configs: .mcp.json (Claude Code), .codex/config.toml (Codex); credentials stay in assistant environment.
   Skills: six OpenSpec plus seven official Vercel/MongoDB skills, with provenance and parity verified by skills:check.
-  Scripts: dev, build, start, lint, mcp:setup, skills:check and openspec. Use npm ci for reproducible installs.
+  Scripts: dev, build, start, lint, test, test:e2e, db:setup, admin:bootstrap, mcp:setup, skills:check and openspec. Use npm ci for reproducible installs.
   Keep the existing GitHub remote and Vercel project; remote Vercel settings need verification before publishing.
   Run OpenSpec through npm run openspec -- <arguments> to use pinned version 2.1.1.
 

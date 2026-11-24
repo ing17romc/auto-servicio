@@ -5,8 +5,9 @@ Leer y aplicar las instrucciones compartidas del proyecto:
 @AGENTS.md
 
 Trabajar directamente en `master`, sin crear ramas salvo solicitud explicita.
-Usar Node.js 26.x y App Router (`app/page.js` y `app/layout.js`). Solo `General Dashboard` en `/`;
-`backend/` esta reservado. Express y Mongoose instalados, sin servidor ni conexion activa.
+Usar Node.js 26.x y App Router: login Google en `/`, dashboard protegido en `/dashboard`,
+acceso pendiente en `/pending` y administracion en `/users` y `/users/activity`.
+`backend/` contiene Better Auth y MongoDB server-only; Express y Mongoose permanecen inactivos.
 Las skills OpenSpec estan en `.claude/skills/`; especificaciones y cambios en
 `openspec/`. Ejecutar `npm run openspec -- <argumentos>` para la version fijada.
 
