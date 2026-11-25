@@ -192,7 +192,7 @@ test(
       await memberPage.goto(`${baseURL}/dashboard`)
       assert.equal(
         await memberPage
-          .getByRole('heading', { name: 'General Dashboard' })
+          .getByRole('heading', { name: /^Hola/ })
           .count(),
         1,
         await memberPage.locator('body').innerText()
@@ -217,6 +217,26 @@ test(
       assert.equal(
         (await memberContext.request.get(`${baseURL}/users/activity`)).status(),
         403
+      )
+
+      const dashboardMobileContext = await browser.newContext({
+        viewport: { width: 320, height: 800 },
+      })
+      await dashboardMobileContext.addCookies([await cookie(admin)])
+      const dashboardMobilePage = await dashboardMobileContext.newPage()
+      await dashboardMobilePage.goto(`${baseURL}/dashboard`)
+      assert.equal(
+        await dashboardMobilePage
+          .getByRole('heading', { name: /^Hola/ })
+          .count(),
+        1
+      )
+      assert.equal(
+        await dashboardMobilePage.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth
+        ),
+        true,
+        'El saludo del dashboard provoca desplazamiento horizontal en 320 px'
       )
 
       const adminContext = await browser.newContext({

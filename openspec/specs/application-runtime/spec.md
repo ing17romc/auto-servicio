@@ -15,22 +15,26 @@ El proyecto SHALL declarar y usar Node.js 26.x, soportado por Vercel, y una vers
 - **AND** no se seleccionan versiones canary ni experimentales
 
 ### Requirement: Instalación y ejecución reproducibles
-El proyecto SHALL permitir instalar con `npm ci`, iniciar desarrollo con `npm run dev`, compilar con `npm run build` y servir producción con `npm start`, sin variables de entorno obligatorias ni servicios de datos disponibles.
+El proyecto SHALL permitir instalar con `npm ci`, iniciar con `npm run dev`, compilar con `npm run build` y servir con `npm start` bajo Node.js 26.x. Instalación y build no SHALL necesitar credenciales ni acceso a MongoDB; las operaciones autenticadas SHALL exigir configuración válida en ejecución.
 
 #### Scenario: Arranque desde una instalación limpia
 - **WHEN** se instala y compila el proyecto con Node.js 26.x sin credenciales externas
-- **THEN** la instalación y compilación terminan correctamente y el servidor de producción atiende `/`
+- **THEN** instalación y compilación terminan correctamente y el servidor sirve `/` con un estado controlado de autenticación no configurada
+
+#### Scenario: Operación configurada
+- **WHEN** se configura Google, secreto de sesión, origen y MongoDB disponible
+- **THEN** el servidor permite autenticar, persistir usuarios y aplicar permisos
 
 ### Requirement: Independencia de las integraciones retiradas
-La instalación y ejecución SHALL funcionar sin Firebase, MySQL ni librerías de interfaz heredadas. Express y Mongoose SHALL estar instalados para uso futuro sin iniciar servidores, crear APIs o conectar bases de datos durante el arranque del dashboard.
+La aplicación SHALL funcionar sin Firebase, MySQL ni interfaz heredada. La autenticación y los datos SHALL ejecutarse en servidor mediante App Router y MongoDB, sin iniciar un servidor Express separado ni enviar dependencias de backend al navegador.
 
 #### Scenario: Operación con servicios externos ausentes
-- **WHEN** se inicia el dashboard sin acceso a Firebase, MySQL o MongoDB
-- **THEN** el arranque no requiere autenticación ni acceso a esos servicios y la pantalla permanece disponible
+- **WHEN** MongoDB o Google no están disponibles
+- **THEN** las operaciones dependientes fallan de forma controlada sin conceder permisos ni intentar integraciones retiradas
 
 #### Scenario: Dependencias de backend disponibles
 - **WHEN** se importan Express y Mongoose después de una instalación limpia
-- **THEN** ambas dependencias se resuelven localmente y Mongoose permanece desconectado sin abrir puertos ni requerir credenciales
+- **THEN** ambas dependencias se resuelven sin iniciar servidores y permanecen inactivas salvo necesidad explícita de otra funcionalidad
 
 ### Requirement: Configuración sin secretos versionados
 La base resultante SHALL excluir archivos de entorno reales del seguimiento de Git y ofrecer un ejemplo sin credenciales. Los secretos SHALL estar ausentes del HTML y de los recursos enviados al navegador.
@@ -49,8 +53,8 @@ El cambio SHALL conservar el historial y remoto existentes de GitHub y permitir 
 - **AND** la limpieza local no publica automáticamente ni modifica recursos externos
 
 ### Requirement: Renderizado inicial desde servidor
-La pantalla SHALL entregar el encabezado `General Dashboard` en el HTML inicial, sin enviar Express, Mongoose ni sus credenciales al navegador.
+La pantalla autorizada SHALL entregar el saludo `Hola, {nombre}` (o `Hola` cuando no haya nombre disponible) en el HTML inicial, sin enviar Express, Mongoose, el driver MongoDB ni secretos al navegador. El documento SHALL declarar idioma español y metadatos apropiados por página.
 
 #### Scenario: Solicitud sin JavaScript
-- **WHEN** se solicita `/` con JavaScript deshabilitado
-- **THEN** se puede leer el encabezado, el documento tiene idioma inglés y título `General Dashboard`, y no hay dependencias de backend en los recursos cliente
+- **WHEN** un usuario autorizado solicita `/dashboard` con JavaScript deshabilitado
+- **THEN** puede leer el encabezado con el saludo, el documento tiene idioma español y título `General Dashboard`, y no hay dependencias de backend en los recursos cliente

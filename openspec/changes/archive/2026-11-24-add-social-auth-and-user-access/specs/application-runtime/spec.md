@@ -25,8 +25,8 @@ La aplicación SHALL funcionar sin Firebase, MySQL ni interfaz heredada. La aute
 - **THEN** ambas dependencias se resuelven sin iniciar servidores y permanecen inactivas salvo necesidad explícita de otra funcionalidad
 
 ### Requirement: Renderizado inicial desde servidor
-La pantalla autorizada SHALL entregar `General Dashboard` en el HTML inicial, sin enviar Express, Mongoose, el driver MongoDB ni secretos al navegador. El documento SHALL declarar idioma español y metadatos apropiados por página.
+La pantalla autorizada SHALL entregar el saludo `Hola, {nombre}` (o `Hola` cuando no haya nombre disponible) en el HTML inicial, sin enviar Express, Mongoose, el driver MongoDB ni secretos al navegador. El documento SHALL declarar idioma español y metadatos apropiados por página.
 
 #### Scenario: Solicitud sin JavaScript
 - **WHEN** un usuario autorizado solicita `/dashboard` con JavaScript deshabilitado
-- **THEN** puede leer el encabezado, el documento tiene idioma español y título `General Dashboard`, y no hay dependencias de backend en los recursos cliente
+- **THEN** puede leer el encabezado con el saludo, el documento tiene idioma español y título `General Dashboard`, y no hay dependencias de backend en los recursos cliente

@@ -8,7 +8,7 @@ export default async function Dashboard() {
     <>
       <PortalHeader identity={identity} />
       <main className="page">
-        <h1>General Dashboard</h1>
+        <h1>{identity.name ? `Hola, ${identity.name}` : 'Hola'}</h1>
       </main>
     </>
   )
