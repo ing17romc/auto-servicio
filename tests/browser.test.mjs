@@ -192,12 +192,18 @@ test(
       await memberPage.goto(`${baseURL}/dashboard`)
       assert.equal(
         await memberPage
-          .getByRole('heading', { name: /^Hola/ })
+          .getByRole('heading', { name: 'Dashboard General Autoservicios' })
           .count(),
         1,
         await memberPage.locator('body').innerText()
       )
       assert.equal(await memberPage.locator('html').getAttribute('lang'), 'es')
+      assert.equal(await memberPage.title(), 'General Dashboard')
+      // Sin JavaScript la estructura llega en el HTML, pero ningún dato de venta.
+      const htmlInicial = await memberPage.content()
+      assert.match(htmlInicial, /Cargando datos del dashboard/)
+      assert.doesNotMatch(htmlInicial, /CHEDRAUI SELECTO|"ytd26_p"/)
+      assert.equal(await memberPage.getByText(/^Hola/).count(), 0)
       await memberPage.reload()
       assert.equal(
         await db
@@ -219,6 +225,117 @@ test(
         403
       )
 
+      // Endpoint de datos del dashboard: sesión y rol verificados en cada petición.
+      const rutaDatos = `${baseURL}/api/dashboard/data`
+      assert.equal((await visitor.request.get(rutaDatos)).status(), 401)
+      assert.equal((await pendingContext.request.get(rutaDatos)).status(), 403)
+      const datos = await memberContext.request.get(rutaDatos)
+      assert.equal(datos.status(), 200)
+      assert.equal(datos.headers()['cache-control'], 'private, no-store')
+      const cuerpo = await datos.json()
+      assert.ok(cuerpo.tiendas.rows.length > 1000 && cuerpo.estados.features.length > 30)
+      assert.doesNotMatch(await (await pendingContext.request.get(rutaDatos)).text(), /ytd26_p/)
+      for (const ruta of [
+        '/dashboard/semanal.json',
+        '/dashboard/tiendas.json',
+        '/backend/dashboard/data/tiendas.json',
+        '/data/tiendas.json',
+      ])
+        assert.equal((await memberContext.request.get(baseURL + ruta)).status(), 404, ruta)
+
+      // Interacción con el dashboard como cuenta Usuario, con JavaScript.
+      const interactivo = await browser.newContext({ viewport: { width: 1280, height: 900 } })
+      await interactivo.addCookies([await cookie(member)])
+      const tablero = await interactivo.newPage()
+      const erroresPagina = []
+      tablero.on('pageerror', (e) => erroresPagina.push(String(e)))
+      tablero.on('console', (m) => m.type() === 'error' && erroresPagina.push(m.text()))
+      await tablero.goto(`${baseURL}/dashboard`)
+      await tablero.getByRole('heading', { name: /^1\.1 Indicadores/ }).waitFor()
+      assert.equal(
+        await tablero.getByRole('tab', { name: /Resumen ejecutivo/ }).getAttribute('aria-selected'),
+        'true'
+      )
+      assert.equal(await tablero.getByRole('tab').count(), 6)
+      assert.match(await tablero.locator('#frase').innerText(), /Venta acumulada 2026: \$/)
+      await tablero.screenshot({
+        path: process.env.TEMP + '/auto-servicio-dashboard-resumen.png',
+        fullPage: true,
+      })
+      const ventaTotal = await tablero.locator('#k1 .big').innerText()
+      const filasCadena = await tablero.locator('#h-cadena + .tw tbody tr').count()
+      assert.equal(filasCadena, 4)
+      assert.ok(await tablero.locator('#g-pesos svg path').count() >= 3)
+      await tablero.getByRole('button', { name: 'Walmart' }).click()
+      assert.equal(
+        await tablero.getByRole('button', { name: 'Walmart' }).getAttribute('aria-pressed'),
+        'true'
+      )
+      assert.equal(await tablero.getByLabel('Cadena').inputValue(), 'Walmart')
+      assert.notEqual(await tablero.locator('#k1 .big').innerText(), ventaTotal)
+      assert.equal(await tablero.locator('#h-cadena + .tw tbody tr').count(), 1)
+      await tablero.getByRole('button', { name: 'Quitar filtros' }).click()
+      assert.equal(await tablero.getByLabel('Cadena').inputValue(), '')
+      assert.equal(await tablero.locator('#k1 .big').innerText(), ventaTotal)
+      await tablero.getByRole('tab', { name: /Mapa y estados/ }).click()
+      await tablero.locator('#estados').waitFor({ state: 'visible' })
+      assert.equal(await tablero.locator('#resumen').isHidden(), true)
+      await tablero
+        .waitForFunction(
+          () => document.querySelectorAll('#mapa-estados svg path').length >= 30,
+          null,
+          { timeout: 5000 }
+        )
+        .catch(async (error) => {
+          throw new Error(
+            error.message +
+              JSON.stringify(erroresPagina) +
+              JSON.stringify(
+                await tablero.evaluate(() => ({
+                  svgs: document.querySelectorAll('#mapa-estados svg').length,
+                  paths: document.querySelectorAll('#mapa-estados svg path').length,
+                  mapas: [...document.querySelectorAll('#mapa-estados .map')].map((e) => [
+                    e.clientWidth,
+                    e.clientHeight,
+                    e.children.length,
+                  ]),
+                }))
+              )
+          )
+        })
+      // Los puntos de tiendas se superponen al mapa: se dispara el evento sobre el estado.
+      await tablero
+        .locator('#mapa-estados svg path')
+        .nth(5)
+        .dispatchEvent('pointermove', { clientX: 400, clientY: 400, bubbles: true })
+      assert.match(
+        await tablero.locator('#mapa-estados .tip:visible').first().innerText(),
+        /por piso|sin tiendas/
+      )
+      await tablero.screenshot({
+        path: process.env.TEMP + '/auto-servicio-dashboard-mapa.png',
+        fullPage: true,
+      })
+      await tablero.getByRole('tab', { name: /Inventarios/ }).click()
+      await tablero.waitForFunction(() => document.querySelectorAll('#g-inv svg path').length >= 1)
+      await tablero.getByRole('tab', { name: /Alertas/ }).click()
+      assert.equal(await tablero.locator('#alertas').isVisible(), true)
+      await tablero.getByRole('tab', { name: /Accionables/ }).click()
+      assert.ok(await tablero.locator('#acciones tbody tr').count() >= 1)
+      await interactivo.close()
+
+      // Fallo del endpoint de datos: mensaje controlado y sin cifras.
+      const fallido = await browser.newContext()
+      await fallido.addCookies([await cookie(member)])
+      const paginaFallida = await fallido.newPage()
+      await paginaFallida.route('**/api/dashboard/data', (route) =>
+        route.fulfill({ status: 503, contentType: 'application/json', body: '{}' })
+      )
+      await paginaFallida.goto(`${baseURL}/dashboard`)
+      await paginaFallida.getByRole('alert').filter({ hasText: 'Servicio no disponible' }).waitFor()
+      assert.equal(await paginaFallida.locator('.kpis').count(), 0)
+      await fallido.close()
+
       const dashboardMobileContext = await browser.newContext({
         viewport: { width: 320, height: 800 },
       })
@@ -227,16 +344,25 @@ test(
       await dashboardMobilePage.goto(`${baseURL}/dashboard`)
       assert.equal(
         await dashboardMobilePage
-          .getByRole('heading', { name: /^Hola/ })
+          .getByRole('heading', { level: 1 })
           .count(),
         1
       )
+      await dashboardMobilePage.getByRole('heading', { name: /^1\.1 Indicadores/ }).waitFor()
       assert.equal(
         await dashboardMobilePage.evaluate(
           () => document.documentElement.scrollWidth <= innerWidth
         ),
         true,
-        'El saludo del dashboard provoca desplazamiento horizontal en 320 px'
+        'El dashboard provoca desplazamiento horizontal en 320 px'
+      )
+      await dashboardMobilePage.getByRole('tab', { name: /Alertas/ }).click()
+      assert.equal(
+        await dashboardMobilePage.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth
+        ),
+        true,
+        'Las tablas anchas deben desplazarse dentro de su contenedor'
       )
 
       const adminContext = await browser.newContext({

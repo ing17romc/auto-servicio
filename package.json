@@ -10,7 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test": "node --test tests/domain.test.mjs tests/portal.integration.test.mjs",
+    "test": "node --test tests/domain.test.mjs tests/dashboard.test.mjs tests/portal.integration.test.mjs",
     "test:e2e": "node --test tests/browser.test.mjs",
     "db:setup": "node --conditions=react-server --env-file-if-exists=.env.local tools/db-setup.mjs",
     "admin:bootstrap": "node --conditions=react-server --env-file-if-exists=.env.local tools/bootstrap-admin.mjs",
@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "better-auth": "1.7.27",
+    "d3": "7.9.2",
     "express": "5.3.0",
     "mongodb": "6.21.0",
     "mongoose": "9.13.0",

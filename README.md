@@ -1,6 +1,8 @@
 # Auto-Servicio
 
-Portal Next.js App Router con acceso Google, autorización por roles y estadísticas de entradas al dashboard. Trabajar directamente en `master`. No se ha publicado este cambio.
+Portal Next.js App Router con acceso Google, autorización por roles, estadísticas de entradas y el dashboard de venta e inventario de autoservicios. Trabajar directamente en `master`. No se ha publicado este cambio.
+
+Producción: <https://auto-servicio.vercel.app/> (dashboard en <https://auto-servicio.vercel.app/dashboard>).
 
 ## Preparación
 
@@ -52,7 +54,7 @@ El script carga `.env.local` y es idempotente. No borra colecciones. Puede falla
 | Rol | Acceso |
 | --- | --- |
 | Pendiente (pending) | `/pending`, mensaje de aprobación pendiente y cierre de sesión |
-| Usuario (user) | `/dashboard` |
+| Usuario (user) | `/dashboard` (dashboard de venta e inventario) |
 | Administrador (admin) | Dashboard, `/users`, `/users/activity` y asignación de roles |
 
 `/` es el login y redirige según el rol cuando ya hay sesión. Toda cuenta nueva inicia Pendiente. Cada operación protegida verifica sesión persistida y rol actual. Un cambio de rol afecta la siguiente operación, incluidas sesiones abiertas. Cookies HttpOnly y SameSite=Lax, Secure en HTTPS; sesiones de siete días, revocables y sin caché de sesión en cookie. La navegación interna usa cargas de documento para revalidar permisos y registrar entradas.
@@ -73,6 +75,24 @@ npm run admin:bootstrap -- ID_INTERNO_REGISTRADO
 ```
 
 El script promueve exactamente esa cuenta, registra actor `system:bootstrap` y bloquea repeticiones. No tiene endpoint público. Volver a `/` para acceder. Los administradores siguientes se asignan desde Usuarios. No enviar credenciales o datos personales por chat ni guardarlos en el repositorio.
+
+## Dashboard de venta e inventario
+
+`/dashboard` muestra el "Dashboard General Autoservicios · Cero Humedad" (Walmart, Chedraui, Soriana y City Fresko; pesos sin IVA), migrado del artefacto de Claude de origen: encabezado con resumen, filtros de Cadena, Estado y Artículo RAC, y seis pestañas (Resumen ejecutivo, Mapa y estados, Productos, Inventarios, Alertas, Accionables) con indicadores, tablas, gráficas de tendencia, mapa de México y mapas de calor. Los cálculos viven en `backend/dashboard/calc.mjs` y se ejecutan en el navegador al cambiar filtros; los componentes están en `components/dashboard/`.
+
+Los datos son archivos JSON del servidor, sin MongoDB, en `backend/dashboard/data/`:
+
+| Archivo | Contenido |
+| --- | --- |
+| `semanal.json` | Venta e inventario semanal 2025 y 2026 por cadena y artículo RAC |
+| `tiendas.json` | Venta acumulada, semanas 45 y 46, últimas 4 semanas e inventario por tienda y artículo |
+| `puntos.json` | Coordenadas de tiendas para el mapa |
+| `presencia-sams.json` | Tiendas Sam's por estado (solo presencia) |
+| `estados.json` | Límites de los estados (se normalizan al cargar) |
+
+Se entregan únicamente por `GET /api/dashboard/data`, que verifica en cada petición sesión válida y rol Usuario o Administrador (401 sin sesión, 403 con otro rol) y responde con `cache-control: private, no-store`. No están en `public/`; solo los logotipos lo están (`public/dashboard/`). Los archivos conservan el formato `{columns, rows}` del artefacto y `backend/dashboard/datasets.mjs` falla con un mensaje claro si falta una columna.
+
+Para publicar otro corte semanal por ahora hay que reemplazar a mano los JSON (mismo formato) y actualizar la etiqueta del corte (semana, año y fechas) en `backend/dashboard/config.mjs`. Los textos de "Fuentes y criterios" del dashboard describen las bases de ese corte y también deben revisarse. Automatizar la lectura de los Excel o de Drive queda para un cambio posterior. Los datos son de negocio: confirmar que el repositorio GitHub es privado antes de versionarlos o publicarlos.
 
 ## Persistencia y actividad
 
@@ -119,6 +139,6 @@ Context7, Playwright y MongoDB de solo lectura mantienen sus configuraciones `.m
 
 ## Publicación y recuperación
 
-Conservar remoto GitHub y proyecto Vercel existentes. No se hace push ni deploy como parte de implementar. Una publicación posterior debe revisar variables privadas, callbacks Google, Node 26.x, preset Next.js, raíz y comandos del proyecto Vercel existente.
+Conservar remoto GitHub y proyecto Vercel existentes (producción: <https://auto-servicio.vercel.app/>). No se hace push ni deploy como parte de implementar. Una publicación posterior debe revisar variables privadas, callbacks Google, Node 26.x, preset Next.js, raíz y comandos del proyecto Vercel existente.
 
 Si falla la autorización en una publicación futura, cerrar temporalmente el acceso y volver a una versión protegida validada; no restaurar automáticamente el dashboard público. Conservar la base para diagnóstico sin borrar usuarios ni eventos.

@@ -7,7 +7,9 @@
 - Mantener cambios acotados, proteger secretos y validar segun el alcance.
 - Runtime: Node.js 26.x; seleccionar la version de `.nvmrc` antes de ejecutar npm.
 - Frontend: Next.js App Router; `/` login Google, `/pending` acceso pendiente,
-  `/dashboard` General Dashboard, `/users` y `/users/activity` solo administradores.
+  `/dashboard` dashboard de venta e inventario (datos en JSON del servidor, endpoint
+  protegido `/api/dashboard/data`), `/users` y `/users/activity` solo administradores.
+  Producción: https://auto-servicio.vercel.app/.
 - `backend/` contiene autenticacion Better Auth, permisos y persistencia MongoDB server-only.
   Express y Mongoose permanecen instalados e inactivos; no iniciar otro servidor.
 - Roles: pending/user/admin; comprobar sesion y rol actual en cada operacion protegida.
